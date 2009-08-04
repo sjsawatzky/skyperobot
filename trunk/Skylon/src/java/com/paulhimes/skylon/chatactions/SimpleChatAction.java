@@ -1,4 +1,4 @@
-package com.paulhimes.skyperobot.chatactions;
+package com.paulhimes.skylon.chatactions;
 
 import com.paulhimes.skylon.ChatAction;
 import com.skype.ChatMessage;
