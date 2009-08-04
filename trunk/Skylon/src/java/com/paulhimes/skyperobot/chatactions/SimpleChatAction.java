@@ -1,6 +1,6 @@
 package com.paulhimes.skyperobot.chatactions;
 
-import com.paulhimes.skyperobot.ChatAction;
+import com.paulhimes.skylon.ChatAction;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 

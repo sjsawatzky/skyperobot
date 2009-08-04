@@ -1,4 +1,4 @@
-package com.paulhimes.skyperobot;
+package com.paulhimes.skylon;
 
 import java.awt.AWTException;
 import java.awt.Color;
