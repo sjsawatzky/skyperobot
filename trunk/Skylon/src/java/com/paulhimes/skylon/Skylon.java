@@ -22,7 +22,8 @@ public class Skylon {
 
 		trayIcon = createTrayIcon();
 
-		new NerveCenter();
+		NerveCenter nerveCenter = new NerveCenter();
+		nerveCenter.addChatActions(ChatActionLoader.loadActions());
 	}
 
 	private TrayIcon createTrayIcon() {
