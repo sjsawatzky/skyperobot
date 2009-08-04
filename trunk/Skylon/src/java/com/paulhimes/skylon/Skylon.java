@@ -40,7 +40,7 @@ public class Skylon {
 	private Image createTrayImage() {
 		try {
 			return ImageIO.read(getClass().getResourceAsStream(
-					"/com/paulhimes/skylon/images/skylon-16.png"));
+					"/com/paulhimes/skylon/images/skylon-16b.png"));
 		} catch (Exception e) {
 			// Image not found. Create a backup.
 			return createBackupTrayImage();
