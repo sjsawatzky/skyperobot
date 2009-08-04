@@ -1,4 +1,4 @@
-package com.paulhimes.skyperobot;
+package com.paulhimes.skylon;
 
 import com.skype.ChatMessage;
 import com.skype.SkypeException;

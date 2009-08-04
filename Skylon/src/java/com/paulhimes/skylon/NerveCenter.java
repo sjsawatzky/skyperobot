@@ -1,4 +1,4 @@
-package com.paulhimes.skyperobot;
+package com.paulhimes.skylon;
 
 import java.io.File;
 import java.io.IOException;
