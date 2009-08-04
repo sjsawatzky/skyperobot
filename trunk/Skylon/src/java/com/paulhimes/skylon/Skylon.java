@@ -1,15 +1,7 @@
 package com.paulhimes.skylon;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
@@ -31,7 +23,7 @@ public class Skylon {
 			// get the SystemTray instance
 			SystemTray tray = SystemTray.getSystemTray();
 
-			TrayIcon trayIcon = new TrayIcon(createTrayImage(), "Skype Robot", createTrayMenu());
+			TrayIcon trayIcon = new TrayIcon(createTrayImage(), "Skylon", createTrayMenu());
 
 			try {
 				tray.add(trayIcon);
@@ -48,7 +40,7 @@ public class Skylon {
 	private Image createTrayImage() {
 		try {
 			return ImageIO.read(getClass().getResourceAsStream(
-					"/com/paulhimes/skylon/images/skyperobot-16.png"));
+					"/com/paulhimes/skylon/images/skylon-16.png"));
 		} catch (Exception e) {
 			// Image not found. Create a backup.
 			return createBackupTrayImage();
