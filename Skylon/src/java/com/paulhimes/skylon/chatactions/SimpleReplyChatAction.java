@@ -1,11 +1,9 @@
 package com.paulhimes.skylon.chatactions;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import com.paulhimes.skylon.ChatAction;
-import com.skype.ChatMessage;
-import com.skype.SkypeException;
+import com.skype.*;
 
 public class SimpleReplyChatAction implements ChatAction {
 
@@ -32,8 +30,6 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	@Override
 	public void sent(ChatMessage message) throws SkypeException {
-		// TODO Auto-generated method stub
-
 	}
 
 }
