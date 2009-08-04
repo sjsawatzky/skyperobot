@@ -1,7 +1,6 @@
 package com.paulhimes.skylon;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
 
@@ -16,7 +15,7 @@ public final class ChatActionLoader {
 		List<ChatAction> actions = new ArrayList<ChatAction>();
 		actions.add(new SimpleReplyChatAction(RegexBuilder.anything(),
 											  RegexBuilder.endsWith("\\(wave\\)"),
-											  "(yes)"));
+											  "(wave)"));
 
 		return actions;
 	}
