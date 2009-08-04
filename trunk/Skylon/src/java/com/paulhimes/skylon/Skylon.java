@@ -14,11 +14,11 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class SkypeRobot {
+public class Skylon {
 
 	private TrayIcon trayIcon;
 
-	public SkypeRobot() {
+	public Skylon() {
 
 		trayIcon = createTrayIcon();
 
@@ -47,7 +47,7 @@ public class SkypeRobot {
 	private Image createTrayImage() {
 		try {
 			return ImageIO.read(getClass().getResourceAsStream(
-					"/com/paulhimes/skyperobot/images/skyperobot-16.png"));
+					"/com/paulhimes/skylon/images/skyperobot-16.png"));
 		} catch (Exception e) {
 			// Image not found. Create a backup.
 			return createBackupTrayImage();
@@ -88,6 +88,6 @@ public class SkypeRobot {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new SkypeRobot();
+		new Skylon();
 	}
 }
