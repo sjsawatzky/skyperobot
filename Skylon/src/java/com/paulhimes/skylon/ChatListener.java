@@ -26,7 +26,9 @@ public final class ChatListener implements ChatMessageListener {
 	}
 
 	public void add(ChatAction action) {
+		action.registerCallback(this);
 		actions.add(action);
+
 	}
 
 	@Override
@@ -43,5 +45,9 @@ public final class ChatListener implements ChatMessageListener {
 		for (ChatAction action : actions) {
 			action.sent(sentChatMessage);
 		}
+	}
+
+	public void giveMessage(String message) {
+		nerveCenter.giveMessage("Chat Action: " + message);
 	}
 }
