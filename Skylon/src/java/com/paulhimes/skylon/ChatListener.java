@@ -11,8 +11,12 @@ import com.skype.SkypeException;
 public final class ChatListener implements ChatMessageListener {
 
 	private final List<ChatAction> actions = new ArrayList<ChatAction>();
+	private final NerveCenter nerveCenter;
 
-	public ChatListener() {
+	public ChatListener(NerveCenter nerveCenter) {
+
+		this.nerveCenter = nerveCenter;
+
 		// Listen for chat messages.
 		try {
 			Skype.addChatMessageListener(this);
@@ -26,14 +30,16 @@ public final class ChatListener implements ChatMessageListener {
 	}
 
 	@Override
-	public void chatMessageReceived(ChatMessage receivedChatMessage) throws SkypeException {
+	public void chatMessageReceived(ChatMessage receivedChatMessage)
+			throws SkypeException {
 		for (ChatAction action : actions) {
 			action.received(receivedChatMessage);
 		}
 	}
 
 	@Override
-	public void chatMessageSent(ChatMessage sentChatMessage) throws SkypeException {
+	public void chatMessageSent(ChatMessage sentChatMessage)
+			throws SkypeException {
 		for (ChatAction action : actions) {
 			action.sent(sentChatMessage);
 		}
