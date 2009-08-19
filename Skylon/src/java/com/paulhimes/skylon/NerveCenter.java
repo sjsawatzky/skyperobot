@@ -13,7 +13,7 @@ public final class NerveCenter {
 		// Instantiate the ChatListener
 		chatListener = new ChatListener(this);
 		this.trayIcon = trayIcon;
-		giveMessage("Started");
+		giveMessage("By your command!");
 	}
 
 	public void addChatActions(List<ChatAction> actions) {
