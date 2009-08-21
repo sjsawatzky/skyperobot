@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import com.paulhimes.skylon.ChatAction;
 import com.paulhimes.skylon.ChatListener;
+import com.paulhimes.skylon.rules.Rules;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
@@ -14,6 +15,7 @@ public class SimpleReplyChatAction implements ChatAction {
 	private final Pattern senderPattern;
 	private final Pattern contentPattern;
 	private final String reply;
+	private final Rules rules = new Rules();
 
 	private ChatListener chatListener;
 
