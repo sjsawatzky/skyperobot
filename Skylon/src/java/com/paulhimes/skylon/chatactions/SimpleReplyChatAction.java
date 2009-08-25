@@ -3,10 +3,9 @@ package com.paulhimes.skylon.chatactions;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.paulhimes.skylon.ChatAction;
 import com.paulhimes.skylon.ChatListener;
-import com.paulhimes.skylon.rules.RuleWriter;
-import com.paulhimes.skylon.rules.Rules;
+import com.paulhimes.skylon.chatactions.rules.RuleWriter;
+import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
