@@ -11,9 +11,12 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActionReader;
 
 public class Skylon {
@@ -25,7 +28,9 @@ public class Skylon {
 		trayIcon = createTrayIcon();
 
 		NerveCenter nerveCenter = new NerveCenter(trayIcon);
-		nerveCenter.addChatActions(ChatActionReader.readActions());
+		List<ChatAction> chatActions = ChatActionReader.readActions(new File(
+				"C:/Users/Paul/Desktop/skylonrules.xml"));
+		nerveCenter.addChatActions(chatActions);
 	}
 
 	private TrayIcon createTrayIcon() {
