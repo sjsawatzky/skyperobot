@@ -3,6 +3,7 @@ package com.paulhimes.skylon;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.paulhimes.skylon.chatactions.ChatAction;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
 import com.skype.Skype;

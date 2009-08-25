@@ -4,6 +4,8 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.util.List;
 
+import com.paulhimes.skylon.chatactions.ChatAction;
+
 public final class NerveCenter {
 
 	private final ChatListener chatListener;

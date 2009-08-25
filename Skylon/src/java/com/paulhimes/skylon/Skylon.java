@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
+import com.paulhimes.skylon.chatactions.ChatActionLoader;
+
 public class Skylon {
 
 	private TrayIcon trayIcon;
