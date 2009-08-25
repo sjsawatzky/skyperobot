@@ -9,13 +9,13 @@ import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleType;
 import com.paulhimes.skylon.chatactions.rules.Rules.RulesOperator;
 
-public final class ChatActionLoader {
+public final class ChatActionReader {
 
-	private ChatActionLoader() {
+	private ChatActionReader() {
 
 	}
 
-	public static List<ChatAction> loadActions() {
+	public static List<ChatAction> readActions() {
 		// Load all the actions
 		List<ChatAction> actions = new ArrayList<ChatAction>();
 

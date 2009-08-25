@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.paulhimes.skylon.chatactions.ChatActionLoader;
+import com.paulhimes.skylon.chatactions.ChatActionReader;
 
 public class Skylon {
 
@@ -25,7 +25,7 @@ public class Skylon {
 		trayIcon = createTrayIcon();
 
 		NerveCenter nerveCenter = new NerveCenter(trayIcon);
-		nerveCenter.addChatActions(ChatActionLoader.loadActions());
+		nerveCenter.addChatActions(ChatActionReader.readActions());
 	}
 
 	private TrayIcon createTrayIcon() {

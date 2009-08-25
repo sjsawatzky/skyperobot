@@ -3,7 +3,11 @@ package com.paulhimes.skylon.chatactions.rules;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import com.paulhimes.skylon.RegexBuilder;
+import com.paulhimes.skylon.chatactions.tools.XmlTools;
 
 public class Rule {
 	// <rule negativeFlag=false type=sender match=contains>paul</rule>
@@ -78,5 +82,17 @@ public class Rule {
 
 		System.out.println("Looking for: " + pattern.toString());
 		return matcher.matches() ^ negativeFlag;
+	}
+
+	public Node encodeXml(Document document) {
+		Node ruleNode = document.createElement("rule");
+
+		XmlTools.setAttribute(ruleNode, "type", getType().name(), document);
+		XmlTools.setAttribute(ruleNode, "match", getMatch().name(), document);
+		XmlTools.setAttribute(ruleNode, "negativeFlag", String
+				.valueOf(isNegativeFlag()), document);
+		ruleNode.setTextContent(getValue());
+
+		return ruleNode;
 	}
 }

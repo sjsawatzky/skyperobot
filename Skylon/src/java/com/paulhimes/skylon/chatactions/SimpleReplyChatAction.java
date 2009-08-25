@@ -4,8 +4,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.paulhimes.skylon.ChatListener;
-import com.paulhimes.skylon.chatactions.rules.RuleWriter;
 import com.paulhimes.skylon.chatactions.rules.Rules;
+import com.paulhimes.skylon.chatactions.tools.XmlTools;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
@@ -69,14 +69,15 @@ public class SimpleReplyChatAction implements ChatAction {
 		// </action>
 
 		Node simpleChatAction = document.createElement("simplechataction");
-		RuleWriter.setAttribute(simpleChatAction, "name", getName());
+		XmlTools.setAttribute(simpleChatAction, "name", getName(), document);
 
 		// reply
-		Node replyNode = RuleWriter.appendChild(simpleChatAction, "reply");
+		Node replyNode = XmlTools.appendChild(simpleChatAction, "reply",
+				document);
 		replyNode.setTextContent(getReply());
 
 		// rules
-		simpleChatAction.appendChild(RuleWriter.encodeRules(getRules()));
+		simpleChatAction.appendChild(getRules().encodeXml(document));
 
 		return simpleChatAction;
 	}
