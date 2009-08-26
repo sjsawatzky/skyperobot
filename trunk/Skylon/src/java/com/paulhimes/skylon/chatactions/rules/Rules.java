@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.chatactions.tools.XmlTools;
 
@@ -63,8 +65,7 @@ public class Rules {
 
 	public Node encodeXml(Document document) {
 		Node rulesNode = document.createElement("rules");
-		XmlTools.setAttribute(rulesNode, "operator", getOperator().name(),
-				document);
+		XmlTools.setAttribute(rulesNode, "operator", getOperator().name(), document);
 		List<Rule> ruleList = getRules();
 		for (Rule rule : ruleList) {
 			Node ruleNode = rule.encodeXml(document);
@@ -72,5 +73,19 @@ public class Rules {
 		}
 
 		return rulesNode;
+	}
+
+	public static Rules parseXml(Element parent) {
+		// Get the rules element.
+		NodeList rulesNodes = parent.getElementsByTagName("rules");
+		Element rulesNode = (Element) rulesNodes.item(0);
+
+		// Get the rules operator.
+		String operatorString = rulesNode.getAttribute("operator");
+		RulesOperator operator = RulesOperator.valueOf(operatorString);
+
+		List<Rule> rules = Rule.parseXml(rulesNode);
+
+		return new Rules(operator, rules);
 	}
 }

@@ -39,7 +39,7 @@ public final class ChatActionReader {
 
 			Element chatActionsNode = (Element) chatActionsNodes.item(0);
 			NodeList simpleChatActionNodes = chatActionsNode
-					.getElementsByTagName("simplechataction");
+					.getElementsByTagName("simplereplychataction");
 
 			Element simpleChatActionNode = (Element) simpleChatActionNodes
 					.item(0);
