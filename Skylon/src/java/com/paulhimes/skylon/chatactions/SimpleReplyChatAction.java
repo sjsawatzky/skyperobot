@@ -1,7 +1,12 @@
 package com.paulhimes.skylon.chatactions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.ChatListener;
 import com.paulhimes.skylon.chatactions.rules.Rules;
@@ -68,17 +73,42 @@ public class SimpleReplyChatAction implements ChatAction {
 		// </rules>
 		// </action>
 
-		Node simpleChatAction = document.createElement("simplechataction");
+		Node simpleChatAction = document.createElement("simplereplychataction");
 		XmlTools.setAttribute(simpleChatAction, "name", getName(), document);
 
 		// reply
-		Node replyNode = XmlTools.appendChild(simpleChatAction, "reply",
-				document);
+		Node replyNode = XmlTools.appendChild(simpleChatAction, "reply", document);
 		replyNode.setTextContent(getReply());
 
 		// rules
 		simpleChatAction.appendChild(getRules().encodeXml(document));
 
 		return simpleChatAction;
+	}
+
+	public static List<ChatAction> parseXml(Element parent) {
+		List<ChatAction> chatActions = new ArrayList<ChatAction>();
+
+		NodeList simpleReplyChatActionNodes = parent.getElementsByTagName("simplereplychataction");
+
+		for (int i = 0; i < simpleReplyChatActionNodes.getLength(); i++) {
+
+			Element simpleReplyChatActionNode = (Element) simpleReplyChatActionNodes.item(i);
+
+			// Get the action name.
+			String name = simpleReplyChatActionNode.getAttribute("name");
+
+			// Get the reply text.
+			NodeList replyNodes = simpleReplyChatActionNode.getElementsByTagName("reply");
+			Element replyNode = (Element) replyNodes.item(0);
+			String replyText = replyNode.getTextContent();
+
+			// Get the rules.
+			Rules rules = Rules.parseXml(simpleReplyChatActionNode);
+
+			chatActions.add(new SimpleReplyChatAction(name, replyText, rules));
+		}
+
+		return chatActions;
 	}
 }

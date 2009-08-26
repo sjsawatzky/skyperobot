@@ -1,10 +1,14 @@
 package com.paulhimes.skylon.chatactions.rules;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.RegexBuilder;
 import com.paulhimes.skylon.chatactions.tools.XmlTools;
@@ -18,8 +22,7 @@ public class Rule {
 
 	private Pattern pattern;
 
-	public Rule(RuleType type, RuleMatch match, String value,
-			boolean negativeFlag) {
+	public Rule(RuleType type, RuleMatch match, String value, boolean negativeFlag) {
 		this.type = type;
 		this.match = match;
 		this.value = value;
@@ -89,10 +92,25 @@ public class Rule {
 
 		XmlTools.setAttribute(ruleNode, "type", getType().name(), document);
 		XmlTools.setAttribute(ruleNode, "match", getMatch().name(), document);
-		XmlTools.setAttribute(ruleNode, "negativeFlag", String
-				.valueOf(isNegativeFlag()), document);
+		XmlTools.setAttribute(ruleNode, "negativeFlag", String.valueOf(isNegativeFlag()), document);
 		ruleNode.setTextContent(getValue());
 
 		return ruleNode;
+	}
+
+	public static List<Rule> parseXml(Element parent) {
+		List<Rule> rulesList = new ArrayList<Rule>();
+
+		NodeList ruleNodes = parent.getElementsByTagName("rule");
+		for (int r = 0; r < ruleNodes.getLength(); r++) {
+			Element rule = (Element) ruleNodes.item(r);
+			RuleMatch match = RuleMatch.valueOf(rule.getAttribute("match"));
+			boolean negativeFlag = Boolean.parseBoolean(rule.getAttribute("negativeFlag"));
+			RuleType type = RuleType.valueOf(rule.getAttribute("type"));
+			String content = rule.getTextContent();
+			rulesList.add(new Rule(type, match, content, negativeFlag));
+		}
+
+		return rulesList;
 	}
 }
