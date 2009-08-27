@@ -2,9 +2,8 @@ package com.paulhimes.skylon;
 
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
-import java.util.List;
 
-import com.paulhimes.skylon.chatactions.ChatAction;
+import com.paulhimes.skylon.chatactions.ChatActions;
 
 public final class NerveCenter {
 
@@ -18,10 +17,8 @@ public final class NerveCenter {
 		giveMessage("By your command!");
 	}
 
-	public void addChatActions(List<ChatAction> actions) {
-		for (ChatAction action : actions) {
-			chatListener.add(action);
-		}
+	public void addChatActions(ChatActions actions) {
+		chatListener.setChatActions(actions);
 	}
 
 	public void giveMessage(String message) {

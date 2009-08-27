@@ -1,16 +1,14 @@
 package com.paulhimes.skylon.chatactions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.ChatListener;
+import com.paulhimes.skylon.XmlParseException;
 import com.paulhimes.skylon.chatactions.rules.Rules;
-import com.paulhimes.skylon.chatactions.tools.XmlTools;
+import com.paulhimes.skylon.tools.XmlTools;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
@@ -86,15 +84,8 @@ public class SimpleReplyChatAction implements ChatAction {
 		return simpleChatAction;
 	}
 
-	public static List<ChatAction> parseXml(Element parent) {
-		List<ChatAction> chatActions = new ArrayList<ChatAction>();
-
-		NodeList simpleReplyChatActionNodes = parent.getElementsByTagName("simplereplychataction");
-
-		for (int i = 0; i < simpleReplyChatActionNodes.getLength(); i++) {
-
-			Element simpleReplyChatActionNode = (Element) simpleReplyChatActionNodes.item(i);
-
+	public static ChatAction parseXml(Element simpleReplyChatActionNode) throws XmlParseException {
+		if (simpleReplyChatActionNode.getNodeName().equalsIgnoreCase("simpleReplyChatAction")) {
 			// Get the action name.
 			String name = simpleReplyChatActionNode.getAttribute("name");
 
@@ -106,9 +97,9 @@ public class SimpleReplyChatAction implements ChatAction {
 			// Get the rules.
 			Rules rules = Rules.parseXml(simpleReplyChatActionNode);
 
-			chatActions.add(new SimpleReplyChatAction(name, replyText, rules));
+			return new SimpleReplyChatAction(name, replyText, rules);
 		}
 
-		return chatActions;
+		throw new XmlParseException("simpleReplyChatAction");
 	}
 }

@@ -12,12 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import com.paulhimes.skylon.chatactions.ChatAction;
-import com.paulhimes.skylon.chatactions.ChatActionReader;
+import org.w3c.dom.Element;
+
+import com.paulhimes.skylon.tools.XmlTools;
 
 public class Skylon {
 
@@ -28,9 +28,16 @@ public class Skylon {
 		trayIcon = createTrayIcon();
 
 		NerveCenter nerveCenter = new NerveCenter(trayIcon);
-		List<ChatAction> chatActions = ChatActionReader.readActions(new File(
-				"C:/Users/Paul/Desktop/skylonrules.xml"));
-		nerveCenter.addChatActions(chatActions);
+
+		// Load the actions.
+		try {
+			Element actionsElement = XmlTools.getElementFromFile(new File("C:/Users/Paul/Desktop/skylonrules.xml"), "actions");
+			Actions actions = Actions.parseXml(actionsElement);
+			nerveCenter.addChatActions(actions.getChatActions());
+		} catch (XmlParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private TrayIcon createTrayIcon() {
@@ -38,8 +45,7 @@ public class Skylon {
 			// get the SystemTray instance
 			SystemTray tray = SystemTray.getSystemTray();
 
-			TrayIcon trayIcon = new TrayIcon(createTrayImage(), "Skylon",
-					createTrayMenu());
+			TrayIcon trayIcon = new TrayIcon(createTrayImage(), "Skylon", createTrayMenu());
 
 			try {
 				tray.add(trayIcon);
@@ -55,8 +61,7 @@ public class Skylon {
 
 	private Image createTrayImage() {
 		try {
-			return ImageIO.read(getClass().getResourceAsStream(
-					"/com/paulhimes/skylon/images/skylon-16.png"));
+			return ImageIO.read(getClass().getResourceAsStream("/com/paulhimes/skylon/images/skylon-16.png"));
 		} catch (Exception e) {
 			// Image not found. Create a backup.
 			return createBackupTrayImage();
@@ -66,8 +71,7 @@ public class Skylon {
 	private Image createBackupTrayImage() {
 		int imageSize = 16;
 
-		BufferedImage backupImage = new BufferedImage(imageSize, imageSize,
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage backupImage = new BufferedImage(imageSize, imageSize, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2 = backupImage.createGraphics();
 		g2.setPaint(Color.DARK_GRAY);
 		g2.fillRect(0, 0, imageSize, imageSize);
