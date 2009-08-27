@@ -1,9 +1,9 @@
 package com.paulhimes.skylon;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.paulhimes.skylon.chatactions.ChatAction;
+import com.paulhimes.skylon.chatactions.ChatActions;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
 import com.skype.Skype;
@@ -11,7 +11,7 @@ import com.skype.SkypeException;
 
 public final class ChatListener implements ChatMessageListener {
 
-	private final List<ChatAction> actions = new ArrayList<ChatAction>();
+	private ChatActions actions = new ChatActions();
 	private final NerveCenter nerveCenter;
 
 	public ChatListener(NerveCenter nerveCenter) {
@@ -26,24 +26,24 @@ public final class ChatListener implements ChatMessageListener {
 		}
 	}
 
-	public void add(ChatAction action) {
-		action.registerCallback(this);
-		actions.add(action);
-
+	public void setChatActions(ChatActions actions) {
+		this.actions = actions;
+		List<ChatAction> actionList = actions.getActions();
+		for (ChatAction action : actionList) {
+			action.registerCallback(this);
+		}
 	}
 
 	@Override
-	public void chatMessageReceived(ChatMessage receivedChatMessage)
-			throws SkypeException {
-		for (ChatAction action : actions) {
+	public void chatMessageReceived(ChatMessage receivedChatMessage) throws SkypeException {
+		for (ChatAction action : actions.getActions()) {
 			action.received(receivedChatMessage);
 		}
 	}
 
 	@Override
-	public void chatMessageSent(ChatMessage sentChatMessage)
-			throws SkypeException {
-		for (ChatAction action : actions) {
+	public void chatMessageSent(ChatMessage sentChatMessage) throws SkypeException {
+		for (ChatAction action : actions.getActions()) {
 			action.sent(sentChatMessage);
 		}
 	}

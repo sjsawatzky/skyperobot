@@ -12,7 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import com.paulhimes.skylon.chatactions.tools.XmlTools;
+import com.paulhimes.skylon.tools.XmlTools;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
@@ -22,14 +22,11 @@ public class ChatActionWriter {
 
 	}
 
-	public static void writeActions(List<ChatAction> chatActions, File file)
-			throws ParserConfigurationException {
-		Document document = DocumentBuilderFactory.newInstance()
-				.newDocumentBuilder().newDocument();
+	public static void writeActions(List<ChatAction> chatActions, File file) throws ParserConfigurationException {
+		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 
 		Node actionsNode = XmlTools.appendChild(document, "actions", document);
-		Node chatActionsNode = XmlTools.appendChild(actionsNode, "chatactions",
-				document);
+		Node chatActionsNode = XmlTools.appendChild(actionsNode, "chatactions", document);
 
 		for (ChatAction chatAction : chatActions) {
 			chatActionsNode.appendChild(chatAction.encodeXml(document));
@@ -37,8 +34,7 @@ public class ChatActionWriter {
 
 		try {
 			FileOutputStream out = new FileOutputStream(file);
-			XMLSerializer output = new XMLSerializer(out, new OutputFormat(
-					document));
+			XMLSerializer output = new XMLSerializer(out, new OutputFormat(document));
 			output.serialize(document);
 			out.close();
 		} catch (FileNotFoundException e1) {

@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.paulhimes.skylon.chatactions.tools.XmlTools;
+import com.paulhimes.skylon.tools.XmlTools;
 
 public class Rules {
 
