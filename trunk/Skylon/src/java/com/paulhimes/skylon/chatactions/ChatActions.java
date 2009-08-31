@@ -3,6 +3,7 @@ package com.paulhimes.skylon.chatactions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,6 +24,17 @@ public class ChatActions {
 
 	public List<ChatAction> getActions() {
 		return actions;
+	}
+
+	public Node encodeXml(Document document) {
+		Node chatActionsNode = document.createElement("chatActions");
+
+		for (ChatAction action : actions) {
+			// actions
+			chatActionsNode.appendChild(action.encodeXml(document));
+		}
+
+		return chatActionsNode;
 	}
 
 	public static ChatActions parseXml(Element chatActionsNode) throws XmlParseException {
