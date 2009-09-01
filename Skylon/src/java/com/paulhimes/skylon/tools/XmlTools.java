@@ -36,11 +36,8 @@ public class XmlTools {
 		try {
 			document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 
-			// Element rootNode = document.getDocumentElement();
-			// System.out.println(rootNode.getNodeName());
-
-			NodeList actionsNodes = document.getElementsByTagName(elementName);
-			return (Element) actionsNodes.item(0);
+			NodeList elementNodes = document.getElementsByTagName(elementName);
+			return (Element) elementNodes.item(0);
 
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block

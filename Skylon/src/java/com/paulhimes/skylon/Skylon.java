@@ -15,14 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -82,40 +76,6 @@ public class Skylon {
 		}
 	}
 
-	private Actions selectDataFile() {
-		JFileChooser chooser = new JFileChooser();
-		FileFilter filter = new FileNameExtensionFilter("Skylon data file", "xml");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showOpenDialog(null);
-
-		File dataFile = null;
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			dataFile = chooser.getSelectedFile();
-
-			Actions actions = loadActions(dataFile);
-			if (actions == null) {
-				// try again
-				int choice = JOptionPane.showOptionDialog(null, "Please choose a different file.", "Invalid File", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-				// if OK was pressed
-				if (choice == JOptionPane.OK_OPTION) {
-					selectDataFile();
-				} else {
-					System.exit(0);
-				}
-			}
-
-			// remember the file path for future reference
-			setDataFilePreference(dataFile.getAbsolutePath());
-			return actions;
-
-		}
-
-		System.exit(0);
-
-		return null;
-	}
-
 	private Actions loadActions(File file) {
 		Actions actions = null;
 		try {
@@ -127,21 +87,6 @@ public class Skylon {
 		}
 
 		return actions;
-	}
-
-	private void setDataFilePreference(String path) {
-		Preferences prefs = Preferences.userNodeForPackage(getClass());
-		prefs.put("dataFilePath", path);
-		try {
-			prefs.flush();
-		} catch (BackingStoreException e) {
-			System.err.println("Unable to write data file path preference.");
-		}
-	}
-
-	private String getDataFilePreference() {
-		Preferences prefs = Preferences.userNodeForPackage(getClass());
-		return prefs.get("dataFilePath", null);
 	}
 
 	private TrayIcon createTrayIcon() {
