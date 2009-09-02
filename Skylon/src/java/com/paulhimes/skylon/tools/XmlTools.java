@@ -14,11 +14,26 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.paulhimes.skylon.XmlParseException;
+import com.paulhimes.skylon.logging.Logger;
 
 public class XmlTools {
 
+	private static final Logger logger = new Logger(XmlTools.class);
+
 	private XmlTools() {
 
+	}
+
+	public static Document createDocument() {
+		// Create a new empty document.
+		Document document = null;
+		try {
+			document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+		} catch (ParserConfigurationException e2) {
+			logger.info("Failed to create new document");
+		}
+
+		return document;
 	}
 
 	public static void setAttribute(Node node, String key, String value, Document document) {
