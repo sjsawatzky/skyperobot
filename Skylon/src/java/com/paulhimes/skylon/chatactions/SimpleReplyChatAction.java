@@ -8,11 +8,14 @@ import org.w3c.dom.NodeList;
 import com.paulhimes.skylon.ChatListener;
 import com.paulhimes.skylon.XmlParseException;
 import com.paulhimes.skylon.chatactions.rules.Rules;
+import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
 public class SimpleReplyChatAction implements ChatAction {
+
+	private final Logger logger = new Logger(getClass());
 
 	private final String name;
 	private final String reply;
@@ -37,7 +40,7 @@ public class SimpleReplyChatAction implements ChatAction {
 			message.getChat().send(reply);
 		}
 
-		System.out.println("Tested " + name);
+		logger.fine("Tested " + name);
 	}
 
 	@Override

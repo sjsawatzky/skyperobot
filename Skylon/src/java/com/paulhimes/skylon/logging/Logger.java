@@ -6,7 +6,7 @@ public class Logger {
 
 	private final java.util.logging.Logger delegate;
 
-	public Logger(Class clazz) {
+	public Logger(Class<?> clazz) {
 		delegate = java.util.logging.Logger.getLogger(clazz.getName());
 		delegate.setUseParentHandlers(false);
 		delegate.addHandler(new ConsoleHandler());
@@ -14,5 +14,9 @@ public class Logger {
 
 	public void info(String message) {
 		delegate.info(message);
+	}
+
+	public void fine(String message) {
+		delegate.fine(message);
 	}
 }

@@ -25,9 +25,6 @@ public final class ChatActionReader {
 		try {
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
 
-			// Element rootNode = document.getDocumentElement();
-			// System.out.println(rootNode.getNodeName());
-
 			NodeList actionsNodes = document.getElementsByTagName("actions");
 			Element actionsNode = (Element) actionsNodes.item(0);
 

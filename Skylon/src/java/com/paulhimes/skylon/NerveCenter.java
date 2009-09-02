@@ -4,8 +4,11 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 
 import com.paulhimes.skylon.chatactions.ChatActions;
+import com.paulhimes.skylon.logging.Logger;
 
 public final class NerveCenter {
+
+	private final Logger logger = new Logger(getClass());
 
 	private final ChatListener chatListener;
 	private final TrayIcon trayIcon;
@@ -23,5 +26,6 @@ public final class NerveCenter {
 
 	public void giveMessage(String message) {
 		trayIcon.displayMessage("Event Triggered", message, MessageType.INFO);
+		logger.info("Event Triggered: " + message);
 	}
 }
