@@ -44,7 +44,6 @@ public class Rules {
 	}
 
 	private boolean matchAll(String senderId, String content) {
-		System.out.println("Matching all");
 		for (Rule rule : rules) {
 			if (!rule.matches(senderId, content)) {
 				return false;
@@ -54,7 +53,6 @@ public class Rules {
 	}
 
 	private boolean matchAny(String senderId, String content) {
-		System.out.println("Matching any");
 		for (Rule rule : rules) {
 			if (rule.matches(senderId, content)) {
 				return true;

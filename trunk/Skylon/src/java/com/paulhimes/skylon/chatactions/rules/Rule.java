@@ -83,7 +83,6 @@ public class Rule {
 
 		Matcher matcher = pattern.matcher(target);
 
-		System.out.println("Looking for: " + pattern.toString());
 		return matcher.matches() ^ negativeFlag;
 	}
 
