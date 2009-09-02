@@ -17,8 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,7 +31,6 @@ public class Skylon {
 	private TrayIcon trayIcon;
 
 	public Skylon() {
-
 		trayIcon = createTrayIcon();
 
 		NerveCenter nerveCenter = new NerveCenter(trayIcon);
@@ -49,14 +46,11 @@ public class Skylon {
 		nerveCenter.addChatActions(actions.getChatActions());
 	}
 
-	private void writeNodeToFile(XmlModel model, File file) {
+	private boolean writeNodeToFile(XmlModel model, File file) {
 		// Create a new emply Actions file.
-		Document document = null;
-		try {
-			document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-		} catch (ParserConfigurationException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+		Document document = XmlTools.createDocument();
+		if (document == null) {
+			return false;
 		}
 
 		Node node = model.encodeXml(document);
@@ -76,6 +70,8 @@ public class Skylon {
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+
+		return true;
 	}
 
 	private Actions loadActions(File file) {
