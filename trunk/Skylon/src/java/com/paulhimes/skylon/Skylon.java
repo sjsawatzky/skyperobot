@@ -38,7 +38,7 @@ public class Skylon {
 
 		NerveCenter nerveCenter = new NerveCenter(trayIcon);
 
-		File actionsFile = new File(System.getProperty("user.dir"), "actions.xml");
+		File actionsFile = new File(System.getProperty("user.dir"), "skylonProfile.xml");
 		Actions actions = loadActions(actionsFile);
 		if (actions == null) {
 			// Create a new empty Actions object.
@@ -65,7 +65,9 @@ public class Skylon {
 
 		try {
 			FileOutputStream out = new FileOutputStream(file);
-			XMLSerializer output = new XMLSerializer(out, new OutputFormat(document));
+			OutputFormat format = new OutputFormat(document);
+			format.setIndenting(true);
+			XMLSerializer output = new XMLSerializer(out, format);
 			output.serialize(document);
 			out.close();
 		} catch (FileNotFoundException e1) {

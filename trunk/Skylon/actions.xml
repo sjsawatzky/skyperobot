@@ -1,2 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<actions><chatActions><simpleReplyChatAction name="Wave Back"><reply>Hello World!</reply><rules operator="AND"><rule match="CONTAINS" negativeFlag="false" type="SENDER">echo</rule><rule match="ENDS_WITH" negativeFlag="false" type="CONTENT">\(wave\)</rule></rules></simpleReplyChatAction></chatActions></actions>
