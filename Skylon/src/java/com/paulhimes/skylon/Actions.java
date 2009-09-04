@@ -9,6 +9,8 @@ import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActions;
+import com.paulhimes.skylon.xml.XmlModel;
+import com.paulhimes.skylon.xml.XmlParseException;
 
 public class Actions implements XmlModel {
 
