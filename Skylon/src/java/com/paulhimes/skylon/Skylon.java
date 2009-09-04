@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
 import com.paulhimes.skylon.xml.XmlModel;
 import com.paulhimes.skylon.xml.XmlParseException;
@@ -30,12 +31,12 @@ import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class Skylon {
 
+	private Logger logger = new Logger(getClass());
 	private TrayIcon trayIcon;
+	private NerveCenter nerveCenter;
 
 	public Skylon() {
 		trayIcon = createTrayIcon();
-
-		NerveCenter nerveCenter = new NerveCenter(trayIcon);
 
 		File actionsFile = new File(System.getProperty("user.dir"), "skylonProfile.xml");
 		Actions actions = loadActions(actionsFile);
@@ -45,7 +46,7 @@ public class Skylon {
 			writeNodeToFile(actions, actionsFile);
 		}
 
-		nerveCenter.addChatActions(actions.getChatActions());
+		nerveCenter = new NerveCenter(trayIcon, actions);
 	}
 
 	private boolean writeNodeToFile(XmlModel model, File file) {
@@ -82,8 +83,7 @@ public class Skylon {
 			Element actionsElement = XmlTools.getElementFromFile(file, "actions");
 			actions = Actions.parseXml(actionsElement);
 		} catch (XmlParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.info("Failed to load actions from file: " + file.getAbsolutePath());
 		}
 
 		return actions;
@@ -134,6 +134,15 @@ public class Skylon {
 		// create a menu
 		PopupMenu popup = new PopupMenu();
 
+		// Create EditActions item
+		MenuItem editActions = new MenuItem("Edit Actions");
+		editActions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editActions();
+			}
+		});
+		popup.add(editActions);
+
 		// Create quit item
 		MenuItem quit = new MenuItem("Quit");
 		quit.addActionListener(new ActionListener() {
@@ -144,6 +153,10 @@ public class Skylon {
 		popup.add(quit);
 
 		return popup;
+	}
+
+	private void editActions() {
+		new EditActionsWindow(nerveCenter.getActions());
 	}
 
 	/**
