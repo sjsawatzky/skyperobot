@@ -1,9 +1,10 @@
-package com.paulhimes.skylon;
+package com.paulhimes.skylon.gui;
 
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import com.paulhimes.skylon.Actions;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActions;
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
@@ -52,6 +53,7 @@ public class ActionsTableModel extends AbstractTableModel {
 		return result;
 	}
 
+	@Override
 	public String getColumnName(int col) {
 		if (col < 0 || col > columnNames.length - 1)
 			return null;
