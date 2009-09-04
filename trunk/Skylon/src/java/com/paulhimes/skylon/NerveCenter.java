@@ -26,6 +26,5 @@ public final class NerveCenter {
 
 	public void giveMessage(String message) {
 		trayIcon.displayMessage("Event Triggered", message, MessageType.INFO);
-		logger.info("Event Triggered: " + message);
 	}
 }

@@ -37,10 +37,9 @@ public class SimpleReplyChatAction implements ChatAction {
 
 		if (rules.matches(senderId, content)) {
 			chatListener.giveMessage(name);
+			logger.info(name);
 			message.getChat().send(reply);
 		}
-
-		logger.fine("Tested " + name);
 	}
 
 	@Override

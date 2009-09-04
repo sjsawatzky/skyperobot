@@ -9,7 +9,9 @@ public class Logger {
 	public Logger(Class<?> clazz) {
 		delegate = java.util.logging.Logger.getLogger(clazz.getName());
 		delegate.setUseParentHandlers(false);
-		delegate.addHandler(new ConsoleHandler());
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setFormatter(new LogFormatter());
+		delegate.addHandler(consoleHandler);
 	}
 
 	public void info(String message) {
