@@ -6,10 +6,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.ChatListener;
-import com.paulhimes.skylon.XmlParseException;
 import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
+import com.paulhimes.skylon.xml.XmlParseException;
 import com.skype.ChatMessage;
 import com.skype.SkypeException;
 

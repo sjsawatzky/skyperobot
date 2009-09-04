@@ -1,4 +1,4 @@
-package com.paulhimes.skylon;
+package com.paulhimes.skylon.xml;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

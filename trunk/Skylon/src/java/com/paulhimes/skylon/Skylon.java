@@ -23,6 +23,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.paulhimes.skylon.tools.XmlTools;
+import com.paulhimes.skylon.xml.XmlModel;
+import com.paulhimes.skylon.xml.XmlParseException;
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 

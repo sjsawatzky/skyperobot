@@ -1,4 +1,4 @@
-package com.paulhimes.skylon;
+package com.paulhimes.skylon.xml;
 
 public class XmlParseException extends Exception {
 

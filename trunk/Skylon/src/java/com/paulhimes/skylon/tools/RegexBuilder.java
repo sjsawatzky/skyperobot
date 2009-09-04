@@ -1,4 +1,4 @@
-package com.paulhimes.skylon;
+package com.paulhimes.skylon.tools;
 
 public final class RegexBuilder {
 

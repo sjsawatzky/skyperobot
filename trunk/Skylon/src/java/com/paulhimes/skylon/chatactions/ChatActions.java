@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.paulhimes.skylon.XmlParseException;
+import com.paulhimes.skylon.xml.XmlParseException;
 
 public class ChatActions {
 
