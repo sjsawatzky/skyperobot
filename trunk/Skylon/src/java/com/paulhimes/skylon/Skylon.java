@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.paulhimes.skylon.gui.EditActionsWindow;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
 import com.paulhimes.skylon.xml.XmlModel;
