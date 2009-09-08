@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.ChatListener;
 import com.paulhimes.skylon.chatactions.rules.Rules;
+import com.paulhimes.skylon.gui.EditSimpleReplyChatAction;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
 import com.paulhimes.skylon.xml.XmlParseException;
@@ -17,8 +18,8 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	private final Logger logger = new Logger(getClass());
 
-	private final String name;
-	private final String reply;
+	private String name;
+	private String reply;
 	private final Rules rules;
 
 	private ChatListener chatListener;
@@ -55,12 +56,20 @@ public class SimpleReplyChatAction implements ChatAction {
 		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Rules getRules() {
 		return rules;
 	}
 
 	public String getReply() {
 		return reply;
+	}
+
+	public void setReply(String reply) {
+		this.reply = reply;
 	}
 
 	@Override
@@ -103,5 +112,10 @@ public class SimpleReplyChatAction implements ChatAction {
 		}
 
 		throw new XmlParseException("simpleReplyChatAction");
+	}
+
+	@Override
+	public void edit() {
+		new EditSimpleReplyChatAction(this);
 	}
 }
