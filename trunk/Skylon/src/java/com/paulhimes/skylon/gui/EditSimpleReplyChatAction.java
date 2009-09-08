@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
@@ -99,7 +100,8 @@ public class EditSimpleReplyChatAction {
 		c.gridwidth = 2;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
-		contentPanel.add(new JTable(), c);
+		JTable rulesTable = new JTable(new RulesTableModel(action.getRules()));
+		contentPanel.add(new JScrollPane(rulesTable), c);
 
 		frame.add(contentPanel);
 
