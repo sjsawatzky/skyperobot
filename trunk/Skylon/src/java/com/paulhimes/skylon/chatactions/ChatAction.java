@@ -15,4 +15,6 @@ public interface ChatAction {
 	public void registerCallback(ChatListener chatListener);
 
 	public Node encodeXml(Document document);
+
+	public void edit();
 }
