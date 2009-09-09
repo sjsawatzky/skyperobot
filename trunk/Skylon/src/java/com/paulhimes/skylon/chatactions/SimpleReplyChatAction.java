@@ -20,7 +20,7 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	private String name;
 	private String reply;
-	private final Rules rules;
+	private Rules rules;
 
 	private ChatListener chatListener;
 
@@ -62,6 +62,10 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	public Rules getRules() {
 		return rules;
+	}
+
+	public void setRules(Rules rules) {
+		this.rules = rules;
 	}
 
 	public String getReply() {
