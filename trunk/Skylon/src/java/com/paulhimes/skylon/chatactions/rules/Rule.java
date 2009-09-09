@@ -47,12 +47,24 @@ public class Rule {
 		return match;
 	}
 
+	public void setMatch(RuleMatch match) {
+		this.match = match;
+	}
+
 	public RuleType getType() {
 		return type;
 	}
 
+	public void setType(RuleType type) {
+		this.type = type;
+	}
+
 	public String getValue() {
 		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	public boolean isNegativeFlag() {
