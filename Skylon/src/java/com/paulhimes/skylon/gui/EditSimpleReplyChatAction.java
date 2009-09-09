@@ -34,7 +34,6 @@ public class EditSimpleReplyChatAction {
 	private final JTextField replyField = new JTextField();
 	private final SimpleReplyChatAction action;
 	private final RulesTableModel tableModel;
-	private final JTable rulesTable;
 
 	public EditSimpleReplyChatAction(SimpleReplyChatAction action) {
 		this.action = action;
@@ -54,6 +53,13 @@ public class EditSimpleReplyChatAction {
 			@Override
 			public void caretUpdate(CaretEvent e) {
 				updateAction();
+			}
+		});
+		JButton addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addRule();
 			}
 		});
 
@@ -102,7 +108,7 @@ public class EditSimpleReplyChatAction {
 		c.gridx = 1;
 		c.gridy = 3;
 		c.weightx = 1;
-		contentPanel.add(new JButton("Add"), c);
+		contentPanel.add(addButton, c);
 
 		c.gridx = 0;
 		c.gridy = 4;
@@ -110,7 +116,7 @@ public class EditSimpleReplyChatAction {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		tableModel = new RulesTableModel(action.getRules());
-		rulesTable = new JTable(tableModel);
+		JTable rulesTable = new JTable(tableModel);
 
 		rulesTable.setDefaultEditor(RuleType.class, new DefaultCellEditor(new JComboBox(RuleType.values())));
 		rulesTable.setDefaultEditor(RuleMatch.class, new DefaultCellEditor(new JComboBox(RuleMatch.values())));
@@ -132,10 +138,12 @@ public class EditSimpleReplyChatAction {
 		frame.setVisible(true);
 	}
 
-	private void removeSelectedRule() {
-		int selectedRow = rulesTable.getSelectedRow();
+	private void removeRule(int rowIndex) {
+		tableModel.removeRule(rowIndex);
+	}
 
-		tableModel.removeRule(selectedRow);
+	private void addRule() {
+		tableModel.addRule();
 	}
 
 	private class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
@@ -143,11 +151,13 @@ public class EditSimpleReplyChatAction {
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			JButton deleteButton = new JButton("X");
 
+			final int rowIndex = row;
+
 			deleteButton.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					removeSelectedRule();
+					removeRule(rowIndex);
 				}
 			});
 

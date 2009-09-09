@@ -52,23 +52,26 @@ public class RulesTableModel extends AbstractTableModel {
 
 	public void setValueAt(Object value, int row, int col) {
 
-		Rule rule = rules.getRules().get(row);
+		if (row < rules.getRules().size()) {
+			Rule rule = rules.getRules().get(row);
 
-		switch (col) {
-		case 0:
-			rule.setType((RuleType) value);
-			break;
-		case 1:
-			rule.setMatch((RuleMatch) value);
-			break;
-		case 2:
-			rule.setValue((String) value);
-			break;
-		case 3:
-			break;
+			switch (col) {
+			case 0:
+				rule.setType((RuleType) value);
+				break;
+			case 1:
+				rule.setMatch((RuleMatch) value);
+				break;
+			case 2:
+				rule.setValue((String) value);
+				break;
+			case 3:
+				break;
+			}
+
+			fireTableCellUpdated(row, col);
 		}
 
-		fireTableCellUpdated(row, col);
 	}
 
 	/*
@@ -92,7 +95,14 @@ public class RulesTableModel extends AbstractTableModel {
 	}
 
 	public void removeRule(int selectedRow) {
-		rules.getRules().remove(selectedRow);
+		if (selectedRow >= 0 && selectedRow < rules.getRules().size()) {
+			rules.getRules().remove(selectedRow);
+			fireTableDataChanged();
+		}
+	}
+
+	public void addRule() {
+		rules.getRules().add(new Rule());
 
 		fireTableDataChanged();
 	}

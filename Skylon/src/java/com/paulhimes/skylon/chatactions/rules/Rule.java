@@ -43,6 +43,10 @@ public class Rule {
 		pattern = Pattern.compile(regexString, Pattern.DOTALL);
 	}
 
+	public Rule() {
+		this(RuleType.CONTENT, RuleMatch.CONTAINS, "", false);
+	}
+
 	public RuleMatch getMatch() {
 		return match;
 	}
