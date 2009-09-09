@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
@@ -32,6 +34,7 @@ public class EditSimpleReplyChatAction {
 
 	private final JTextField nameField = new JTextField();
 	private final JTextField replyField = new JTextField();
+	private final JComboBox operatorBox = new JComboBox(RulesOperator.values());
 	private final SimpleReplyChatAction action;
 	private final RulesTableModel tableModel;
 
@@ -55,8 +58,16 @@ public class EditSimpleReplyChatAction {
 				updateAction();
 			}
 		});
-		JButton addButton = new JButton("Add");
-		addButton.addActionListener(new ActionListener() {
+		operatorBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateAction();
+				}
+			}
+		});
+		JButton newRuleButton = new JButton("New Rule");
+		newRuleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				addRule();
@@ -98,7 +109,7 @@ public class EditSimpleReplyChatAction {
 		c.gridx = 1;
 		c.gridy = 2;
 		c.weightx = 1;
-		contentPanel.add(new JComboBox(RulesOperator.values()), c);
+		contentPanel.add(operatorBox, c);
 
 		c.gridx = 0;
 		c.gridy = 3;
@@ -108,7 +119,7 @@ public class EditSimpleReplyChatAction {
 		c.gridx = 1;
 		c.gridy = 3;
 		c.weightx = 1;
-		contentPanel.add(addButton, c);
+		contentPanel.add(newRuleButton, c);
 
 		c.gridx = 0;
 		c.gridy = 4;
@@ -174,6 +185,8 @@ public class EditSimpleReplyChatAction {
 	private void updateAction() {
 		setName(nameField.getText());
 		setReply(replyField.getText());
+		action.getRules().setOperator((RulesOperator) operatorBox.getSelectedItem());
+		action.setRules(tableModel.getRules());
 	}
 
 	private void setReply(String reply) {

@@ -91,7 +91,7 @@ public class RulesTableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int row, int col) {
-		return col < 4;
+		return true;
 	}
 
 	public void removeRule(int selectedRow) {
@@ -105,6 +105,10 @@ public class RulesTableModel extends AbstractTableModel {
 		rules.getRules().add(new Rule());
 
 		fireTableDataChanged();
+	}
+
+	public Rules getRules() {
+		return rules;
 	}
 
 }

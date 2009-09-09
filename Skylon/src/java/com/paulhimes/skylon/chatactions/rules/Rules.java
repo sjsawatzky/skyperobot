@@ -28,6 +28,10 @@ public class Rules {
 		return operator;
 	}
 
+	public void setOperator(RulesOperator operator) {
+		this.operator = operator;
+	}
+
 	public List<Rule> getRules() {
 		return rules;
 	}
