@@ -21,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -127,6 +129,12 @@ public class EditSimpleReplyChatAction {
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		tableModel = new RulesTableModel(action.getRules());
+		tableModel.addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				updateAction();
+			}
+		});
 		JTable rulesTable = new JTable(tableModel);
 
 		rulesTable.setDefaultEditor(RuleType.class, new DefaultCellEditor(new JComboBox(RuleType.values())));
@@ -158,6 +166,8 @@ public class EditSimpleReplyChatAction {
 	}
 
 	private class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
+
+		private static final long serialVersionUID = -4049435441388527521L;
 
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 			JButton deleteButton = new JButton("X");
