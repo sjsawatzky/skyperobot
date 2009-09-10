@@ -28,6 +28,10 @@ public class Rule {
 		this.value = value;
 		this.negativeFlag = negativeFlag;
 
+		updatePattern();
+	}
+
+	private void updatePattern() {
 		String regexString = "";
 		switch (match) {
 		case CONTAINS:
@@ -53,6 +57,8 @@ public class Rule {
 
 	public void setMatch(RuleMatch match) {
 		this.match = match;
+
+		updatePattern();
 	}
 
 	public RuleType getType() {
@@ -61,6 +67,8 @@ public class Rule {
 
 	public void setType(RuleType type) {
 		this.type = type;
+
+		updatePattern();
 	}
 
 	public String getValue() {
@@ -69,6 +77,8 @@ public class Rule {
 
 	public void setValue(String value) {
 		this.value = value;
+
+		updatePattern();
 	}
 
 	public boolean isNegativeFlag() {
