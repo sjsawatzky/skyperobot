@@ -39,6 +39,7 @@ public class EditSimpleReplyChatAction {
 	private final JComboBox operatorBox = new JComboBox(RulesOperator.values());
 	private final SimpleReplyChatAction action;
 	private final RulesTableModel tableModel;
+	private final JTable rulesTable;
 
 	public EditSimpleReplyChatAction(SimpleReplyChatAction action) {
 		this.action = action;
@@ -135,10 +136,23 @@ public class EditSimpleReplyChatAction {
 				updateAction();
 			}
 		});
-		JTable rulesTable = new JTable(tableModel);
-
+		rulesTable = new JTable(tableModel);
 		rulesTable.setDefaultEditor(RuleType.class, new DefaultCellEditor(new JComboBox(RuleType.values())));
+		rulesTable.setDefaultRenderer(RuleType.class, new TableCellRenderer() {
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				JComboBox comboBox = new JComboBox(RuleType.values());
+				comboBox.setSelectedItem(value);
+				return comboBox;
+			}
+		});
 		rulesTable.setDefaultEditor(RuleMatch.class, new DefaultCellEditor(new JComboBox(RuleMatch.values())));
+		rulesTable.setDefaultRenderer(RuleMatch.class, new TableCellRenderer() {
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				JComboBox comboBox = new JComboBox(RuleMatch.values());
+				comboBox.setSelectedItem(value);
+				return comboBox;
+			}
+		});
 
 		TableColumn deleteColumn = rulesTable.getColumnModel().getColumn(3);
 		deleteColumn.setCellRenderer(new TableCellRenderer() {
@@ -149,12 +163,51 @@ public class EditSimpleReplyChatAction {
 		});
 		deleteColumn.setCellEditor(new ButtonEditor());
 
+		packRows(rulesTable, 2);
+
 		contentPanel.add(new JScrollPane(rulesTable), c);
 
 		frame.add(contentPanel);
 
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	// Returns the preferred height of a row.
+	// The result is equal to the tallest cell in the row.
+	public int getPreferredRowHeight(JTable table, int rowIndex, int margin) {
+		// Get the current default height for all rows
+		int height = table.getRowHeight();
+
+		// Determine highest cell in the row
+		for (int c = 0; c < table.getColumnCount(); c++) {
+			TableCellRenderer renderer = table.getCellRenderer(rowIndex, c);
+			Component comp = table.prepareRenderer(renderer, rowIndex, c);
+			int h = comp.getPreferredSize().height + 2 * margin;
+			height = Math.max(height, h);
+		}
+		return height;
+	}
+
+	// The height of each row is set to the preferred height of the
+	// tallest cell in that row.
+	public void packRows(JTable table, int margin) {
+		packRows(table, 0, table.getRowCount(), margin);
+	}
+
+	// For each row >= start and < end, the height of a
+	// row is set to the preferred height of the tallest cell
+	// in that row.
+	public void packRows(JTable table, int start, int end, int margin) {
+		for (int r = 0; r < table.getRowCount(); r++) {
+			// Get the preferred height
+			int h = getPreferredRowHeight(table, r, margin);
+
+			// Now set the row height using the preferred height
+			if (table.getRowHeight(r) != h) {
+				table.setRowHeight(r, h);
+			}
+		}
 	}
 
 	private void removeRule(int rowIndex) {
@@ -197,6 +250,8 @@ public class EditSimpleReplyChatAction {
 		setReply(replyField.getText());
 		action.getRules().setOperator((RulesOperator) operatorBox.getSelectedItem());
 		action.setRules(tableModel.getRules());
+
+		packRows(rulesTable, 10);
 	}
 
 	private void setReply(String reply) {
