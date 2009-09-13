@@ -1,6 +1,7 @@
 package com.paulhimes.skylon.gui;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -8,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
@@ -19,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.TableModelEvent;
@@ -28,11 +32,16 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
+import com.paulhimes.skylon.chatactions.rules.Rule;
+import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleType;
 import com.paulhimes.skylon.chatactions.rules.Rules.RulesOperator;
+import com.paulhimes.skylon.logging.Logger;
 
 public class EditSimpleReplyChatAction {
+
+	private final Logger logger = new Logger(getClass());
 
 	private final JTextField nameField = new JTextField();
 	private final JTextField replyField = new JTextField();
@@ -41,10 +50,10 @@ public class EditSimpleReplyChatAction {
 	private final RulesTableModel tableModel;
 	private final JTable rulesTable;
 
+	private final JPanel panel;
+
 	public EditSimpleReplyChatAction(SimpleReplyChatAction action) {
 		this.action = action;
-
-		JFrame frame = new JFrame("Skylon - Edit SimpleReplyChatAction");
 
 		// Initialize components
 		nameField.setText(action.getName());
@@ -78,7 +87,7 @@ public class EditSimpleReplyChatAction {
 		});
 
 		// Layout all the components in the content pane
-		JPanel contentPanel = new JPanel(new GridBagLayout());
+		panel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		c.gridx = 0;
@@ -88,41 +97,41 @@ public class EditSimpleReplyChatAction {
 		c.insets = new Insets(5, 5, 5, 5);
 		c.ipadx = 10;
 		c.ipady = 10;
-		contentPanel.add(new JLabel("Name"), c);
+		panel.add(new JLabel("Name"), c);
 
 		c.gridx = 1;
 		c.weightx = 1;
-		contentPanel.add(nameField, c);
+		panel.add(nameField, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 0;
-		contentPanel.add(new JLabel("Reply"), c);
+		panel.add(new JLabel("Reply"), c);
 
 		c.gridx = 1;
 		c.gridy = 1;
 		c.weightx = 1;
-		contentPanel.add(replyField, c);
+		panel.add(replyField, c);
 
 		c.gridx = 0;
 		c.gridy = 2;
 		c.weightx = 0;
-		contentPanel.add(new JLabel("Rules Operator"), c);
+		panel.add(new JLabel("Rules Operator"), c);
 
 		c.gridx = 1;
 		c.gridy = 2;
 		c.weightx = 1;
-		contentPanel.add(operatorBox, c);
+		panel.add(operatorBox, c);
 
 		c.gridx = 0;
 		c.gridy = 3;
 		c.weightx = 0;
-		contentPanel.add(new JLabel("Rules"), c);
+		panel.add(new JLabel("Rules"), c);
 
 		c.gridx = 1;
 		c.gridy = 3;
 		c.weightx = 1;
-		contentPanel.add(newRuleButton, c);
+		panel.add(newRuleButton, c);
 
 		c.gridx = 0;
 		c.gridy = 4;
@@ -137,6 +146,10 @@ public class EditSimpleReplyChatAction {
 			}
 		});
 		rulesTable = new JTable(tableModel);
+
+		// Don't allow the user to drag columns.
+		rulesTable.getTableHeader().setReorderingAllowed(false);
+
 		rulesTable.setDefaultEditor(RuleType.class, new DefaultCellEditor(new JComboBox(RuleType.values())));
 		rulesTable.setDefaultRenderer(RuleType.class, new TableCellRenderer() {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -158,24 +171,37 @@ public class EditSimpleReplyChatAction {
 		deleteColumn.setCellRenderer(new TableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				return new JButton("X");
+				return makeDeleteButton();
 			}
 		});
 		deleteColumn.setCellEditor(new ButtonEditor());
 
+		// Make all columns non-resizable
+		Enumeration<TableColumn> columns = rulesTable.getColumnModel().getColumns();
+		while (columns.hasMoreElements()) {
+			TableColumn column = columns.nextElement();
+			column.setResizable(false);
+		}
+
+		packTable(rulesTable);
+
+		panel.add(new JScrollPane(rulesTable), c);
+
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	private void packTable(JTable rulesTable) {
 		packRows(rulesTable, 2);
-
-		contentPanel.add(new JScrollPane(rulesTable), c);
-
-		frame.add(contentPanel);
-
-		frame.pack();
-		frame.setVisible(true);
+		packColumns(rulesTable, 0, 2, 2);
+		packColumns(rulesTable, 3, 4, 2);
 	}
 
 	// Returns the preferred height of a row.
 	// The result is equal to the tallest cell in the row.
-	public int getPreferredRowHeight(JTable table, int rowIndex, int margin) {
+	private int getPreferredRowHeight(JTable table, int rowIndex, int margin) {
 		// Get the current default height for all rows
 		int height = table.getRowHeight();
 
@@ -189,17 +215,50 @@ public class EditSimpleReplyChatAction {
 		return height;
 	}
 
+	// Returns the preferred width of a column.
+	// The result is equal to the widest cell in the column.
+	private int getPreferredColumnWidth(JTable table, int columnIndex, int margin) {
+		int columnWidth = 0;
+
+		int rowCount = table.getModel().getRowCount();
+		for (int r = 0; r < rowCount; r++) {
+			TableCellRenderer cellRenderer = table.getCellRenderer(r, columnIndex);
+			Component component = table.prepareRenderer(cellRenderer, r, columnIndex);
+
+			int w = component.getPreferredSize().width + 2 * margin;
+			columnWidth = Math.max(columnWidth, w);
+		}
+
+		return columnWidth;
+	}
+
 	// The height of each row is set to the preferred height of the
 	// tallest cell in that row.
-	public void packRows(JTable table, int margin) {
+	private void packRows(JTable table, int margin) {
 		packRows(table, 0, table.getRowCount(), margin);
+	}
+
+	private void packColumns(JTable table, int margin) {
+		packColumns(table, 0, table.getColumnCount(), margin);
+	}
+
+	private void packColumns(JTable table, int start, int end, int margin) {
+		for (int c = start; c < end; c++) {
+			int w = getPreferredColumnWidth(table, c, margin);
+
+			TableColumn column = table.getColumnModel().getColumn(c);
+
+			column.setWidth(w);
+			column.setMaxWidth(w);
+			column.setMinWidth(w);
+		}
 	}
 
 	// For each row >= start and < end, the height of a
 	// row is set to the preferred height of the tallest cell
 	// in that row.
-	public void packRows(JTable table, int start, int end, int margin) {
-		for (int r = 0; r < table.getRowCount(); r++) {
+	private void packRows(JTable table, int start, int end, int margin) {
+		for (int r = start; r < end; r++) {
 			// Get the preferred height
 			int h = getPreferredRowHeight(table, r, margin);
 
@@ -223,7 +282,8 @@ public class EditSimpleReplyChatAction {
 		private static final long serialVersionUID = -4049435441388527521L;
 
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-			JButton deleteButton = new JButton("X");
+
+			JButton deleteButton = makeDeleteButton();
 
 			final int rowIndex = row;
 
@@ -245,13 +305,21 @@ public class EditSimpleReplyChatAction {
 		}
 	}
 
+	private JButton makeDeleteButton() {
+		JButton deleteButton = new JButton("X");
+		deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
+
+		return deleteButton;
+	}
+
 	private void updateAction() {
 		setName(nameField.getText());
 		setReply(replyField.getText());
 		action.getRules().setOperator((RulesOperator) operatorBox.getSelectedItem());
 		action.setRules(tableModel.getRules());
 
-		packRows(rulesTable, 10);
+		packTable(rulesTable);
 	}
 
 	private void setReply(String reply) {
@@ -262,7 +330,19 @@ public class EditSimpleReplyChatAction {
 		action.setName(name);
 	}
 
-	// public static void main(String[] args) {
-	// new EditSimpleReplyChatAction(new SimpleReplyChatAction("name", "reply", new Rules(RulesOperator.AND, new ArrayList<Rule>())));
-	// }
+	public static void main(String[] args) {
+
+		ArrayList<Rule> list = new ArrayList<Rule>();
+		list.add(new Rule(RuleType.SENDER, RuleMatch.CONTAINS, "echo", false));
+		list.add(new Rule(RuleType.CONTENT, RuleMatch.ENDS_WITH, "\\(wave\\)", false));
+
+		SimpleReplyChatAction testAction = new SimpleReplyChatAction("Wave", "Wave back!", new Rules(RulesOperator.AND, list));
+		JPanel testPanel = testAction.edit();
+
+		JFrame editActionFrame = new JFrame("Skylon - Edit " + testAction.getTypeString());
+		editActionFrame.add(testPanel);
+
+		editActionFrame.pack();
+		editActionFrame.setVisible(true);
+	}
 }

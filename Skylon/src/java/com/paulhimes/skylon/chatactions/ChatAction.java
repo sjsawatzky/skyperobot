@@ -1,5 +1,7 @@
 package com.paulhimes.skylon.chatactions;
 
+import javax.swing.JPanel;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -16,5 +18,7 @@ public interface ChatAction {
 
 	public Node encodeXml(Document document);
 
-	public void edit();
+	public JPanel edit();
+
+	public String getTypeString();
 }

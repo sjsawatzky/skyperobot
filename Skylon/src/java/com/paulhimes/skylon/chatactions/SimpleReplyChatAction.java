@@ -1,5 +1,7 @@
 package com.paulhimes.skylon.chatactions;
 
+import javax.swing.JPanel;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,6 +30,11 @@ public class SimpleReplyChatAction implements ChatAction {
 		this.name = name;
 		this.reply = reply;
 		this.rules = rules;
+	}
+
+	@Override
+	public String getTypeString() {
+		return "Simple Reply Chat Action";
 	}
 
 	@Override
@@ -119,7 +126,7 @@ public class SimpleReplyChatAction implements ChatAction {
 	}
 
 	@Override
-	public void edit() {
-		new EditSimpleReplyChatAction(this);
+	public JPanel edit() {
+		return new EditSimpleReplyChatAction(this).getPanel();
 	}
 }
