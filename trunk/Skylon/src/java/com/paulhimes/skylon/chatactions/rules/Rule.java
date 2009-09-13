@@ -86,11 +86,31 @@ public class Rule {
 	}
 
 	public static enum RuleType {
-		SENDER, CONTENT;
+		SENDER("Sender"), CONTENT("Content");
+
+		private final String displayString;
+
+		private RuleType(String displayString) {
+			this.displayString = displayString;
+		}
+
+		public String toString() {
+			return displayString;
+		};
 	}
 
 	public static enum RuleMatch {
-		CONTAINS, ENDS_WITH;
+		CONTAINS("contains"), ENDS_WITH("ends with");
+
+		private final String displayString;
+
+		private RuleMatch(String displayString) {
+			this.displayString = displayString;
+		}
+
+		public String toString() {
+			return displayString;
+		};
 	}
 
 	public boolean matches(String senderId, String content) {

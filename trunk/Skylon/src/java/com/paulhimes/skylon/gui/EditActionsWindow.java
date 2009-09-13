@@ -40,6 +40,9 @@ public class EditActionsWindow {
 		int selectedRow = table.getSelectedRow();
 		ChatAction chatAction = actions.getChatActions().getActions().get(selectedRow);
 
-		chatAction.edit();
+		JFrame editActionFrame = new JFrame("Skylon - Edit " + chatAction.getTypeString());
+		editActionFrame.add(chatAction.edit());
+		editActionFrame.pack();
+		editActionFrame.setVisible(true);
 	}
 }
