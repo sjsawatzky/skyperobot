@@ -2,6 +2,7 @@ package com.paulhimes.skylon.gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +28,7 @@ public class EditActionsWindow {
 	private JTable table = new JTable();
 	private Actions actions;
 	private CardLayout cardLayout = new CardLayout();
+	private JButton backButton = new JButton("Back");
 
 	public EditActionsWindow(Actions actions) {
 		this.actions = actions;
@@ -35,9 +37,7 @@ public class EditActionsWindow {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() > 1) {
-					editAction();
-				}
+				editAction();
 			}
 		});
 		contentPanel.add(new JScrollPane(table), BorderLayout.CENTER);
@@ -62,6 +62,8 @@ public class EditActionsWindow {
 		// Flip to the new card.
 		cardLayout.show(cardPanel, "other");
 		frame.setTitle("Skylon - Edit " + chatAction.getTypeString());
+
+		backButton.setEnabled(true);
 	}
 
 	/**
@@ -70,7 +72,6 @@ public class EditActionsWindow {
 	private void cleanCards() {
 		Component[] components = cardPanel.getComponents();
 
-		logger.info("There are " + components.length);
 		for (int i = 1; i < components.length; i++) {
 			cardPanel.remove(components[i]);
 		}
@@ -78,31 +79,23 @@ public class EditActionsWindow {
 
 	private JPanel makeNavigationPanel() {
 		JPanel navPanel = new JPanel(new BorderLayout());
-		JButton backButton = new JButton("Back");
-		JButton editButton = new JButton("Edit");
+		navPanel.setBackground(Color.LIGHT_GRAY);
+
+		backButton.setEnabled(false);
 
 		backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Switch to the main edit card.
 				cardLayout.first(cardPanel);
-
 				// Clean up the stack.
 				cleanCards();
 
-				logger.info("" + cardPanel.getComponentCount());
-			}
-		});
-
-		editButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				editAction();
+				backButton.setEnabled(false);
 			}
 		});
 
 		navPanel.add(backButton, BorderLayout.WEST);
-		navPanel.add(editButton, BorderLayout.EAST);
 
 		return navPanel;
 	}
