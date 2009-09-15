@@ -147,18 +147,22 @@ public class EditSimpleReplyChatAction {
 		// Don't allow the user to drag columns.
 		rulesTable.getTableHeader().setReorderingAllowed(false);
 
-		rulesTable.setDefaultEditor(RuleType.class, new DefaultCellEditor(new JComboBox(RuleType.values())));
-		rulesTable.setDefaultRenderer(RuleType.class, new TableCellRenderer() {
+		// TODO Parameterize this enum cell setup (ruleType and ruleMatch)
+		final Class<?> typeEnum = RuleType.class;
+		rulesTable.setDefaultEditor(typeEnum, new DefaultCellEditor(new JComboBox(typeEnum.getEnumConstants())));
+		rulesTable.setDefaultRenderer(typeEnum, new TableCellRenderer() {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				JComboBox comboBox = new JComboBox(RuleType.values());
+				JComboBox comboBox = new JComboBox(typeEnum.getEnumConstants());
 				comboBox.setSelectedItem(value);
 				return comboBox;
 			}
 		});
-		rulesTable.setDefaultEditor(RuleMatch.class, new DefaultCellEditor(new JComboBox(RuleMatch.values())));
-		rulesTable.setDefaultRenderer(RuleMatch.class, new TableCellRenderer() {
+
+		final Class<?> matchEnum = RuleMatch.class;
+		rulesTable.setDefaultEditor(matchEnum, new DefaultCellEditor(new JComboBox(matchEnum.getEnumConstants())));
+		rulesTable.setDefaultRenderer(matchEnum, new TableCellRenderer() {
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				JComboBox comboBox = new JComboBox(RuleMatch.values());
+				JComboBox comboBox = new JComboBox(matchEnum.getEnumConstants());
 				comboBox.setSelectedItem(value);
 				return comboBox;
 			}
