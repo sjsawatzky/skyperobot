@@ -1,5 +1,11 @@
 package com.paulhimes.skylon.gui;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
 import com.paulhimes.skylon.chatactions.rules.Rule;
@@ -44,10 +50,25 @@ public class RulesTableModel extends AbstractTableModel {
 			result = rule.getValue();
 			break;
 		case 3:
-			result = "X";
-			break;
+			JButton deleteButton = makeDeleteButton();
+			final int row = rowIndex;
+			deleteButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					removeRule(row);
+				}
+			});
+			return deleteButton;
 		}
 		return result;
+	}
+
+	private JButton makeDeleteButton() {
+		JButton deleteButton = new JButton("X");
+		deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
+
+		return deleteButton;
 	}
 
 	public void setValueAt(Object value, int row, int col) {

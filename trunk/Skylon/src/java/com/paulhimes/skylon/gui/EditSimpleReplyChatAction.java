@@ -1,7 +1,6 @@
 package com.paulhimes.skylon.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,7 +11,6 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,12 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -38,6 +34,7 @@ import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleType;
 import com.paulhimes.skylon.chatactions.rules.Rules.RulesOperator;
 import com.paulhimes.skylon.logging.Logger;
+import com.paulhimes.skylon.tools.TableTools;
 
 public class EditSimpleReplyChatAction {
 
@@ -167,14 +164,14 @@ public class EditSimpleReplyChatAction {
 			}
 		});
 
-		TableColumn deleteColumn = rulesTable.getColumnModel().getColumn(3);
-		deleteColumn.setCellRenderer(new TableCellRenderer() {
+		// Set default renderer/editor for all JButton columns.
+		rulesTable.setDefaultRenderer(JButton.class, new TableCellRenderer() {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				return makeDeleteButton();
+				return (JButton) value;
 			}
 		});
-		deleteColumn.setCellEditor(new ButtonEditor());
+		rulesTable.setDefaultEditor(JButton.class, new TableTools.ButtonEditor());
 
 		// Make all columns non-resizable
 		Enumeration<TableColumn> columns = rulesTable.getColumnModel().getColumns();
@@ -189,128 +186,18 @@ public class EditSimpleReplyChatAction {
 
 	}
 
+	public void packTable(JTable rulesTable) {
+		TableTools.packRows(rulesTable, 2);
+		TableTools.packColumns(rulesTable, 0, 2, 2);
+		TableTools.packColumns(rulesTable, 3, 4, 2);
+	}
+
 	public JPanel getPanel() {
 		return panel;
 	}
 
-	private void packTable(JTable rulesTable) {
-		packRows(rulesTable, 2);
-		packColumns(rulesTable, 0, 2, 2);
-		packColumns(rulesTable, 3, 4, 2);
-	}
-
-	// Returns the preferred height of a row.
-	// The result is equal to the tallest cell in the row.
-	private int getPreferredRowHeight(JTable table, int rowIndex, int margin) {
-		// Get the current default height for all rows
-		int height = table.getRowHeight();
-
-		// Determine highest cell in the row
-		for (int c = 0; c < table.getColumnCount(); c++) {
-			TableCellRenderer renderer = table.getCellRenderer(rowIndex, c);
-			Component comp = table.prepareRenderer(renderer, rowIndex, c);
-			int h = comp.getPreferredSize().height + 2 * margin;
-			height = Math.max(height, h);
-		}
-		return height;
-	}
-
-	// Returns the preferred width of a column.
-	// The result is equal to the widest cell in the column.
-	private int getPreferredColumnWidth(JTable table, int columnIndex, int margin) {
-		int columnWidth = 0;
-
-		int rowCount = table.getModel().getRowCount();
-		for (int r = 0; r < rowCount; r++) {
-			TableCellRenderer cellRenderer = table.getCellRenderer(r, columnIndex);
-			Component component = table.prepareRenderer(cellRenderer, r, columnIndex);
-
-			int w = component.getPreferredSize().width + 2 * margin;
-			columnWidth = Math.max(columnWidth, w);
-		}
-
-		return columnWidth;
-	}
-
-	// The height of each row is set to the preferred height of the
-	// tallest cell in that row.
-	private void packRows(JTable table, int margin) {
-		packRows(table, 0, table.getRowCount(), margin);
-	}
-
-	private void packColumns(JTable table, int margin) {
-		packColumns(table, 0, table.getColumnCount(), margin);
-	}
-
-	private void packColumns(JTable table, int start, int end, int margin) {
-		for (int c = start; c < end; c++) {
-			int w = getPreferredColumnWidth(table, c, margin);
-
-			TableColumn column = table.getColumnModel().getColumn(c);
-
-			column.setWidth(w);
-			column.setMaxWidth(w);
-			column.setMinWidth(w);
-		}
-	}
-
-	// For each row >= start and < end, the height of a
-	// row is set to the preferred height of the tallest cell
-	// in that row.
-	private void packRows(JTable table, int start, int end, int margin) {
-		for (int r = start; r < end; r++) {
-			// Get the preferred height
-			int h = getPreferredRowHeight(table, r, margin);
-
-			// Now set the row height using the preferred height
-			if (table.getRowHeight(r) != h) {
-				table.setRowHeight(r, h);
-			}
-		}
-	}
-
-	private void removeRule(int rowIndex) {
-		tableModel.removeRule(rowIndex);
-	}
-
 	private void addRule() {
 		tableModel.addRule();
-	}
-
-	private class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
-
-		private static final long serialVersionUID = -4049435441388527521L;
-
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-
-			JButton deleteButton = makeDeleteButton();
-
-			final int rowIndex = row;
-
-			deleteButton.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					removeRule(rowIndex);
-				}
-			});
-
-			return deleteButton;
-		}
-
-		@Override
-		public Object getCellEditorValue() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	}
-
-	private JButton makeDeleteButton() {
-		JButton deleteButton = new JButton("X");
-		deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
-
-		return deleteButton;
 	}
 
 	private void updateAction() {
@@ -340,6 +227,7 @@ public class EditSimpleReplyChatAction {
 		JPanel testPanel = testAction.edit();
 
 		JFrame editActionFrame = new JFrame("Skylon - Edit " + testAction.getTypeString());
+		editActionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		editActionFrame.add(testPanel);
 
 		editActionFrame.pack();
