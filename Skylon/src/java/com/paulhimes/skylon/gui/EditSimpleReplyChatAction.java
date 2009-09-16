@@ -1,6 +1,5 @@
 package com.paulhimes.skylon.gui;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,23 +8,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
-import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
 import com.paulhimes.skylon.chatactions.rules.Rule;
@@ -34,7 +28,6 @@ import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleType;
 import com.paulhimes.skylon.chatactions.rules.Rules.RulesOperator;
 import com.paulhimes.skylon.logging.Logger;
-import com.paulhimes.skylon.tools.TableTools;
 
 public class EditSimpleReplyChatAction {
 
@@ -45,7 +38,7 @@ public class EditSimpleReplyChatAction {
 	private final JComboBox operatorBox = new JComboBox(RulesOperator.values());
 	private final SimpleReplyChatAction action;
 	private final RulesTableModel tableModel;
-	private final JTable rulesTable;
+	private final SwingTable rulesTable;
 
 	private final JPanel panel;
 
@@ -142,58 +135,10 @@ public class EditSimpleReplyChatAction {
 				updateAction();
 			}
 		});
-		rulesTable = new JTable(tableModel);
-
-		// Don't allow the user to drag columns.
-		rulesTable.getTableHeader().setReorderingAllowed(false);
-
-		// TODO Parameterize this enum cell setup (ruleType and ruleMatch)
-		final Class<?> typeEnum = RuleType.class;
-		rulesTable.setDefaultEditor(typeEnum, new DefaultCellEditor(new JComboBox(typeEnum.getEnumConstants())));
-		rulesTable.setDefaultRenderer(typeEnum, new TableCellRenderer() {
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				JComboBox comboBox = new JComboBox(typeEnum.getEnumConstants());
-				comboBox.setSelectedItem(value);
-				return comboBox;
-			}
-		});
-
-		final Class<?> matchEnum = RuleMatch.class;
-		rulesTable.setDefaultEditor(matchEnum, new DefaultCellEditor(new JComboBox(matchEnum.getEnumConstants())));
-		rulesTable.setDefaultRenderer(matchEnum, new TableCellRenderer() {
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				JComboBox comboBox = new JComboBox(matchEnum.getEnumConstants());
-				comboBox.setSelectedItem(value);
-				return comboBox;
-			}
-		});
-
-		// Set default renderer/editor for all JButton columns.
-		rulesTable.setDefaultRenderer(JButton.class, new TableCellRenderer() {
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				return (JButton) value;
-			}
-		});
-		rulesTable.setDefaultEditor(JButton.class, new TableTools.ButtonEditor());
-
-		// Make all columns non-resizable
-		Enumeration<TableColumn> columns = rulesTable.getColumnModel().getColumns();
-		while (columns.hasMoreElements()) {
-			TableColumn column = columns.nextElement();
-			column.setResizable(false);
-		}
-
-		packTable(rulesTable);
+		rulesTable = new SwingTable(tableModel, 2);
 
 		panel.add(new JScrollPane(rulesTable), c);
 
-	}
-
-	public void packTable(JTable rulesTable) {
-		TableTools.packRows(rulesTable, 2);
-		TableTools.packColumns(rulesTable, 0, 2, 2);
-		TableTools.packColumns(rulesTable, 3, 4, 2);
 	}
 
 	public JPanel getPanel() {
@@ -210,7 +155,7 @@ public class EditSimpleReplyChatAction {
 		action.getRules().setOperator((RulesOperator) operatorBox.getSelectedItem());
 		action.setRules(tableModel.getRules());
 
-		packTable(rulesTable);
+		rulesTable.pack();
 	}
 
 	private void setReply(String reply) {

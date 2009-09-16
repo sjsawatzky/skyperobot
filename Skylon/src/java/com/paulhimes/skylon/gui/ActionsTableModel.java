@@ -2,6 +2,7 @@ package com.paulhimes.skylon.gui;
 
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 
 import com.paulhimes.skylon.Actions;
@@ -13,7 +14,7 @@ public class ActionsTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 4392135386648484092L;
 
-	private String[] columnNames = new String[] { "Type", "Name" };
+	private String[] columnNames = new String[] { "Type", "Name", "", "", "" };
 
 	private Actions actions;
 
@@ -23,7 +24,7 @@ public class ActionsTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return 2;
+		return 5;
 	}
 
 	@Override
@@ -41,16 +42,20 @@ public class ActionsTableModel extends AbstractTableModel {
 		List<ChatAction> actionsList = chatActions.getActions();
 		ChatAction action = actionsList.get(rowIndex);
 
-		String result = "";
 		switch (columnIndex) {
 		case 0:
-			result = "SimpleReplyChatAction";
-			break;
+			return "SimpleReplyChatAction";
 		case 1:
-			result = ((SimpleReplyChatAction) action).getName();
-			break;
+			return ((SimpleReplyChatAction) action).getName();
+		case 2:
+			return new JButton("Up");
+		case 3:
+			return new JButton("Down");
+		case 4:
+			return new JButton("X");
 		}
-		return result;
+
+		return null;
 	}
 
 	@Override
@@ -61,4 +66,7 @@ public class ActionsTableModel extends AbstractTableModel {
 		return columnNames[col];
 	}
 
+	public Class<?> getColumnClass(int c) {
+		return getValueAt(0, c).getClass();
+	}
 }
