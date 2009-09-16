@@ -3,11 +3,14 @@ package com.paulhimes.skylon.tools;
 import java.awt.Component;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 public class TableTools {
 
@@ -62,6 +65,33 @@ public class TableTools {
 		}
 	}
 
+	public static void packButtonColumns(JTable table, int margin) {
+		TableModel tableModel = table.getModel();
+
+		for (int i = 0; i < tableModel.getColumnCount(); i++) {
+			if (JButton.class.isAssignableFrom(tableModel.getColumnClass(i))) {
+				packColumns(table, i, i + 1, margin);
+			}
+		}
+	}
+
+	public static void packEnumColumns(JTable table, int margin) {
+		TableModel tableModel = table.getModel();
+
+		for (int i = 0; i < tableModel.getColumnCount(); i++) {
+			if (Enum.class.isAssignableFrom(tableModel.getColumnClass(i))) {
+				packColumns(table, i, i + 1, margin);
+			}
+		}
+	}
+
+	public static void packTable(JTable rulesTable, int margin) {
+		TableTools.packRows(rulesTable, margin);
+
+		TableTools.packButtonColumns(rulesTable, margin);
+		TableTools.packEnumColumns(rulesTable, margin);
+	}
+
 	// For each row >= start and < end, the height of a
 	// row is set to the preferred height of the tallest cell
 	// in that row.
@@ -75,6 +105,27 @@ public class TableTools {
 				table.setRowHeight(r, h);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void configureEnumCells(JTable table) {
+		TableModel tableModel = table.getModel();
+		for (int i = 0; i < tableModel.getColumnCount(); i++) {
+			if (Enum.class.isAssignableFrom(tableModel.getColumnClass(i))) {
+				configureEnumCells(table, (Class<? extends Enum<?>>) tableModel.getColumnClass(i));
+			}
+		}
+	}
+
+	public static void configureEnumCells(JTable table, final Class<? extends Enum<?>> enumeration) {
+		table.setDefaultEditor(enumeration, new DefaultCellEditor(new JComboBox(enumeration.getEnumConstants())));
+		table.setDefaultRenderer(enumeration, new TableCellRenderer() {
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				JComboBox comboBox = new JComboBox(enumeration.getEnumConstants());
+				comboBox.setSelectedItem(value);
+				return comboBox;
+			}
+		});
 	}
 
 	public static class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
@@ -91,4 +142,5 @@ public class TableTools {
 			return null;
 		}
 	}
+
 }

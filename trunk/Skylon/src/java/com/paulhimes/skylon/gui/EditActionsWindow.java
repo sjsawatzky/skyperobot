@@ -13,11 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import com.paulhimes.skylon.Actions;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.logging.Logger;
+import com.paulhimes.skylon.tools.TableTools;
 
 public class EditActionsWindow {
 
@@ -25,7 +25,7 @@ public class EditActionsWindow {
 
 	private JFrame frame = new JFrame("Skylon - Edit Actions");
 	private JPanel cardPanel = new JPanel();
-	private JTable table = new JTable();
+	private SwingTable table;
 	private Actions actions;
 	private CardLayout cardLayout = new CardLayout();
 	private JButton backButton = new JButton("Back");
@@ -33,7 +33,8 @@ public class EditActionsWindow {
 	public EditActionsWindow(Actions actions) {
 		this.actions = actions;
 		JPanel contentPanel = new JPanel(new BorderLayout());
-		table.setModel(new ActionsTableModel(actions));
+		table = new SwingTable(new ActionsTableModel(actions), 2);
+		TableTools.packColumns(table, 0, 1, 2);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

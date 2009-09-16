@@ -40,15 +40,13 @@ public class RulesTableModel extends AbstractTableModel {
 
 		Rule rule = rules.getRules().get(rowIndex);
 
-		String result = "";
 		switch (columnIndex) {
 		case 0:
 			return rule.getType();
 		case 1:
 			return rule.getMatch();
 		case 2:
-			result = rule.getValue();
-			break;
+			return rule.getValue();
 		case 3:
 			JButton deleteButton = makeDeleteButton();
 			final int row = rowIndex;
@@ -60,7 +58,8 @@ public class RulesTableModel extends AbstractTableModel {
 			});
 			return deleteButton;
 		}
-		return result;
+
+		return null;
 	}
 
 	private JButton makeDeleteButton() {
