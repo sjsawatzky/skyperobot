@@ -1,11 +1,8 @@
 package com.paulhimes.skylon.gui;
 
-import java.awt.Component;
 import java.util.Enumeration;
 
-import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
@@ -29,13 +26,7 @@ public class SwingTable extends JTable {
 		TableTools.configureEnumCells(this);
 
 		// Set default renderer/editor for all JButton columns.
-		setDefaultRenderer(JButton.class, new TableCellRenderer() {
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				return (JButton) value;
-			}
-		});
-		setDefaultEditor(JButton.class, new TableTools.ButtonEditor());
+		TableTools.configureButtonCells(this);
 
 		// Make all columns non-resizable
 		Enumeration<TableColumn> columns = getColumnModel().getColumns();
