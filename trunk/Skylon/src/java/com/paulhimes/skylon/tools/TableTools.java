@@ -128,6 +128,16 @@ public class TableTools {
 		});
 	}
 
+	public static void configureButtonCells(JTable table) {
+		table.setDefaultRenderer(JButton.class, new TableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				return (JButton) value;
+			}
+		});
+		table.setDefaultEditor(JButton.class, new TableTools.ButtonEditor());
+	}
+
 	public static class ButtonEditor extends AbstractCellEditor implements TableCellEditor {
 
 		private static final long serialVersionUID = -4049435441388527521L;
