@@ -137,19 +137,19 @@ public class ActionsTableModel extends AbstractTableModel {
 	}
 
 	private JButton makeUpButton() {
-		JButton deleteButton = new JButton("Up");
-		deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
+		JButton upButton = new JButton("Up");
+		upButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+		upButton.setPreferredSize(new Dimension(30, upButton.getPreferredSize().height));
 
-		return deleteButton;
+		return upButton;
 	}
 
 	private JButton makeDownButton() {
-		JButton deleteButton = new JButton("Down");
-		deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
+		JButton downButton = new JButton("Down");
+		downButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+		downButton.setPreferredSize(new Dimension(30, downButton.getPreferredSize().height));
 
-		return deleteButton;
+		return downButton;
 	}
 
 	public void addAction(ChatAction action) {
