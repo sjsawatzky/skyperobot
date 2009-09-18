@@ -1,7 +1,5 @@
 package com.paulhimes.skylon;
 
-import java.util.List;
-
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActions;
 import com.skype.ChatMessage;
@@ -28,10 +26,7 @@ public final class ChatListener implements ChatMessageListener {
 
 	public void setChatActions(ChatActions actions) {
 		this.actions = actions;
-		List<ChatAction> actionList = actions.getActions();
-		for (ChatAction action : actionList) {
-			action.registerCallback(this);
-		}
+		actions.registerCallback(this);
 	}
 
 	@Override

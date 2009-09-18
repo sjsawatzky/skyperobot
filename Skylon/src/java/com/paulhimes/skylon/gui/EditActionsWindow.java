@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 
 import com.paulhimes.skylon.Actions;
 import com.paulhimes.skylon.chatactions.ChatAction;
+import com.paulhimes.skylon.chatactions.ChatActionType;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.TableTools;
 
@@ -35,6 +36,7 @@ public class EditActionsWindow {
 	private JComboBox actionTypeSelector;
 	private CardLayout cardLayout = new CardLayout();
 	private JButton backButton = new JButton("Back");
+	private ActionsTableModel actionsTableModel;
 
 	public EditActionsWindow(Actions actions) {
 		this.actions = actions;
@@ -55,12 +57,19 @@ public class EditActionsWindow {
 		c.gridx = 1;
 		c.weightx = 1;
 
-		actionTypeSelector = new JComboBox();
+		actionTypeSelector = new JComboBox(ChatActionType.values());
 		contentPanel.add(actionTypeSelector, c);
 
 		c.gridx = 2;
 		c.weightx = 0;
-		contentPanel.add(new JButton("Add"), c);
+		JButton addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addAction();
+			}
+		});
+		contentPanel.add(addButton, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -69,7 +78,8 @@ public class EditActionsWindow {
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.BOTH;
 
-		table = new SwingTable(new ActionsTableModel(actions), 2);
+		actionsTableModel = new ActionsTableModel(actions);
+		table = new SwingTable(actionsTableModel, 2);
 		TableTools.packColumns(table, 0, 1, 2);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -87,6 +97,13 @@ public class EditActionsWindow {
 		frame.add(cardPanel, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	private void addAction() {
+		String selectedItem = actionTypeSelector.getSelectedItem().toString();
+		ChatActionType chatActionType = (ChatActionType) actionTypeSelector.getSelectedItem();
+		actionsTableModel.addAction(chatActionType.instantiate());
+		logger.info(selectedItem);
 	}
 
 	private void editAction() {
