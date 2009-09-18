@@ -1,6 +1,8 @@
 package com.paulhimes.skylon.gui;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -11,8 +13,11 @@ import com.paulhimes.skylon.Actions;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActions;
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
+import com.paulhimes.skylon.logging.Logger;
 
 public class ActionsTableModel extends AbstractTableModel {
+
+	private final Logger logger = new Logger(getClass());
 
 	private static final long serialVersionUID = 4392135386648484092L;
 
@@ -46,15 +51,39 @@ public class ActionsTableModel extends AbstractTableModel {
 
 		switch (columnIndex) {
 		case 0:
-			return "SimpleReplyChatAction";
+			return action.getTypeString();
 		case 1:
 			return ((SimpleReplyChatAction) action).getName();
 		case 2:
-			return makeUpButton();
+			JButton upButton = makeUpButton();
+			final int upRow = rowIndex;
+			upButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					moveActionUp(upRow);
+				}
+			});
+			return upButton;
 		case 3:
-			return makeDownButton();
+			JButton downButton = makeDownButton();
+			final int downRow = rowIndex;
+			downButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					moveActionDown(downRow);
+				}
+			});
+			return downButton;
 		case 4:
-			return makeDeleteButton();
+			JButton deleteButton = makeDeleteButton();
+			final int deleteRow = rowIndex;
+			deleteButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					deleteAction(deleteRow);
+				}
+			});
+			return deleteButton;
 		}
 
 		return null;
@@ -74,6 +103,29 @@ public class ActionsTableModel extends AbstractTableModel {
 
 	public boolean isCellEditable(int row, int col) {
 		return true;
+	}
+
+	private void deleteAction(int index) {
+		logger.info("delete action " + index);
+		actions.getChatActions().remove(index);
+
+		fireTableDataChanged();
+	}
+
+	private void moveActionUp(int index) {
+		logger.info("move up action " + index);
+
+		actions.getChatActions().moveUp(index);
+
+		fireTableDataChanged();
+	}
+
+	private void moveActionDown(int index) {
+		logger.info("move down action " + index);
+
+		actions.getChatActions().moveDown(index);
+
+		fireTableDataChanged();
 	}
 
 	private JButton makeDeleteButton() {
@@ -98,5 +150,11 @@ public class ActionsTableModel extends AbstractTableModel {
 		deleteButton.setPreferredSize(new Dimension(30, deleteButton.getPreferredSize().height));
 
 		return deleteButton;
+	}
+
+	public void addAction(ChatAction action) {
+		actions.getChatActions().add(action);
+
+		fireTableDataChanged();
 	}
 }

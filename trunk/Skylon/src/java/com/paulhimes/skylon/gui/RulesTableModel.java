@@ -18,6 +18,7 @@ public class RulesTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = -3897700210715570245L;
 
 	private String[] columnNames = new String[] { "Type", "Match", "Value", "" };
+	private Class[] columnClasses = new Class[] { RuleType.class, RuleMatch.class, String.class, JButton.class };
 
 	private Rules rules;
 
@@ -95,7 +96,7 @@ public class RulesTableModel extends AbstractTableModel {
 	}
 
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		return columnClasses[c];
 	}
 
 	@Override
