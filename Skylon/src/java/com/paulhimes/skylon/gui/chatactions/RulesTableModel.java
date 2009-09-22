@@ -1,4 +1,4 @@
-package com.paulhimes.skylon.gui;
+package com.paulhimes.skylon.gui.chatactions;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

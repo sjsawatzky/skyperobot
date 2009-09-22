@@ -1,4 +1,4 @@
-package com.paulhimes.skylon.gui;
+package com.paulhimes.skylon.gui.chatactions;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,7 @@ import com.paulhimes.skylon.chatactions.ChatActions;
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
 import com.paulhimes.skylon.logging.Logger;
 
-public class ActionsTableModel extends AbstractTableModel {
+public class ChatActionsTableModel extends AbstractTableModel {
 
 	private final Logger logger = new Logger(getClass());
 
@@ -25,7 +25,7 @@ public class ActionsTableModel extends AbstractTableModel {
 
 	private Actions actions;
 
-	public ActionsTableModel(Actions actions) {
+	public ChatActionsTableModel(Actions actions) {
 		this.actions = actions;
 	}
 

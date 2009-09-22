@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import com.paulhimes.skylon.Actions;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActionType;
+import com.paulhimes.skylon.gui.chatactions.ChatActionsTableModel;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.TableTools;
 
@@ -33,10 +34,10 @@ public class EditActionsWindow {
 	private JPanel cardPanel = new JPanel();
 	private SwingTable table;
 	private Actions actions;
-	private JComboBox actionTypeSelector;
+	private JComboBox chatActionTypeSelector;
 	private CardLayout cardLayout = new CardLayout();
 	private JButton backButton = new JButton("Back");
-	private ActionsTableModel actionsTableModel;
+	private ChatActionsTableModel chatActionsTableModel;
 
 	public EditActionsWindow(Actions actions) {
 		this.actions = actions;
@@ -52,13 +53,13 @@ public class EditActionsWindow {
 		c.insets = new Insets(5, 5, 5, 5);
 		c.ipadx = 10;
 		c.ipady = 10;
-		contentPanel.add(new JLabel("Actions Types"), c);
+		contentPanel.add(new JLabel("Chat Action Types"), c);
 
 		c.gridx = 1;
 		c.weightx = 1;
 
-		actionTypeSelector = new JComboBox(ChatActionType.values());
-		contentPanel.add(actionTypeSelector, c);
+		chatActionTypeSelector = new JComboBox(ChatActionType.values());
+		contentPanel.add(chatActionTypeSelector, c);
 
 		c.gridx = 2;
 		c.weightx = 0;
@@ -78,8 +79,8 @@ public class EditActionsWindow {
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.BOTH;
 
-		actionsTableModel = new ActionsTableModel(actions);
-		table = new SwingTable(actionsTableModel, 2);
+		chatActionsTableModel = new ChatActionsTableModel(actions);
+		table = new SwingTable(chatActionsTableModel, 2);
 		TableTools.packColumns(table, 0, 1, 2);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -100,9 +101,9 @@ public class EditActionsWindow {
 	}
 
 	private void addAction() {
-		String selectedItem = actionTypeSelector.getSelectedItem().toString();
-		ChatActionType chatActionType = (ChatActionType) actionTypeSelector.getSelectedItem();
-		actionsTableModel.addAction(chatActionType.instantiate());
+		String selectedItem = chatActionTypeSelector.getSelectedItem().toString();
+		ChatActionType chatActionType = (ChatActionType) chatActionTypeSelector.getSelectedItem();
+		chatActionsTableModel.addAction(chatActionType.instantiate());
 		logger.info(selectedItem);
 	}
 
