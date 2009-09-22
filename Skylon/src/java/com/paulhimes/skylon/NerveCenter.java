@@ -9,25 +9,17 @@ public final class NerveCenter {
 
 	private final Logger logger = new Logger(getClass());
 
-	private final Actions actions;
-	private final ChatListener chatListener;
 	private final TrayIcon trayIcon;
 
-	public NerveCenter(TrayIcon trayIcon, Actions actions) {
+	public NerveCenter(TrayIcon trayIcon) {
 		// Instantiate the ChatListener
-		chatListener = new ChatListener(this);
+		new ChatListener();
 		this.trayIcon = trayIcon;
-		this.actions = actions;
 
-		chatListener.setChatActions(actions.getChatActions());
 		giveMessage("By your command!");
 	}
 
 	public void giveMessage(String message) {
 		trayIcon.displayMessage("Event Triggered", message, MessageType.INFO);
-	}
-
-	public Actions getActions() {
-		return actions;
 	}
 }

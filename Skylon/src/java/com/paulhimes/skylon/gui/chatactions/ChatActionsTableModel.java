@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
-import com.paulhimes.skylon.Actions;
+import com.paulhimes.skylon.DataStore;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActions;
 import com.paulhimes.skylon.chatactions.SimpleReplyChatAction;
@@ -23,10 +23,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 
 	private String[] columnNames = new String[] { "Type", "Name", "", "", "" };
 
-	private Actions actions;
-
-	public ChatActionsTableModel(Actions actions) {
-		this.actions = actions;
+	public ChatActionsTableModel() {
 	}
 
 	@Override
@@ -37,16 +34,16 @@ public class ChatActionsTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 		int totalActions = 0;
-		ChatActions chatActions = actions.getChatActions();
-		totalActions += chatActions.getActions().size();
+		ChatActions chatActions = DataStore.getChatActions();
+		totalActions += chatActions.getChatActionList().size();
 		return totalActions;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
-		ChatActions chatActions = actions.getChatActions();
-		List<ChatAction> actionsList = chatActions.getActions();
+		ChatActions chatActions = DataStore.getChatActions();
+		List<ChatAction> actionsList = chatActions.getChatActionList();
 		ChatAction action = actionsList.get(rowIndex);
 
 		switch (columnIndex) {
@@ -107,7 +104,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 
 	private void deleteAction(int index) {
 		logger.info("delete action " + index);
-		actions.getChatActions().remove(index);
+		DataStore.getChatActions().remove(index);
 
 		fireTableDataChanged();
 	}
@@ -115,7 +112,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 	private void moveActionUp(int index) {
 		logger.info("move up action " + index);
 
-		actions.getChatActions().moveUp(index);
+		DataStore.getChatActions().moveUp(index);
 
 		fireTableDataChanged();
 	}
@@ -123,7 +120,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 	private void moveActionDown(int index) {
 		logger.info("move down action " + index);
 
-		actions.getChatActions().moveDown(index);
+		DataStore.getChatActions().moveDown(index);
 
 		fireTableDataChanged();
 	}
@@ -153,7 +150,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 	}
 
 	public void addAction(ChatAction action) {
-		actions.getChatActions().add(action);
+		DataStore.getChatActions().add(action);
 
 		fireTableDataChanged();
 	}

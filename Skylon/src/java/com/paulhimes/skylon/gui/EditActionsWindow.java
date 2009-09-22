@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.paulhimes.skylon.Actions;
+import com.paulhimes.skylon.DataStore;
 import com.paulhimes.skylon.chatactions.ChatAction;
 import com.paulhimes.skylon.chatactions.ChatActionType;
 import com.paulhimes.skylon.gui.chatactions.ChatActionsTableModel;
@@ -33,14 +33,12 @@ public class EditActionsWindow {
 	private JFrame frame = new JFrame("Skylon - Edit Actions");
 	private JPanel cardPanel = new JPanel();
 	private SwingTable table;
-	private Actions actions;
 	private JComboBox chatActionTypeSelector;
 	private CardLayout cardLayout = new CardLayout();
 	private JButton backButton = new JButton("Back");
 	private ChatActionsTableModel chatActionsTableModel;
 
-	public EditActionsWindow(Actions actions) {
-		this.actions = actions;
+	public EditActionsWindow() {
 
 		// Layout all the components in the content pane
 		JPanel contentPanel = new JPanel(new GridBagLayout());
@@ -67,7 +65,7 @@ public class EditActionsWindow {
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				addAction();
+				addChatAction();
 			}
 		});
 		contentPanel.add(addButton, c);
@@ -79,13 +77,13 @@ public class EditActionsWindow {
 		c.gridwidth = 3;
 		c.fill = GridBagConstraints.BOTH;
 
-		chatActionsTableModel = new ChatActionsTableModel(actions);
+		chatActionsTableModel = new ChatActionsTableModel();
 		table = new SwingTable(chatActionsTableModel, 2);
 		TableTools.packColumns(table, 0, 1, 2);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				editAction();
+				editChatAction();
 			}
 		});
 		contentPanel.add(new JScrollPane(table), c);
@@ -100,16 +98,16 @@ public class EditActionsWindow {
 		frame.setVisible(true);
 	}
 
-	private void addAction() {
+	private void addChatAction() {
 		String selectedItem = chatActionTypeSelector.getSelectedItem().toString();
 		ChatActionType chatActionType = (ChatActionType) chatActionTypeSelector.getSelectedItem();
 		chatActionsTableModel.addAction(chatActionType.instantiate());
 		logger.info(selectedItem);
 	}
 
-	private void editAction() {
+	private void editChatAction() {
 		int selectedRow = table.getSelectedRow();
-		ChatAction chatAction = actions.getChatActions().getActions().get(selectedRow);
+		ChatAction chatAction = DataStore.getChatActions().getChatActionList().get(selectedRow);
 
 		// Add the new card.
 		cardPanel.add(chatAction.edit(), "other");

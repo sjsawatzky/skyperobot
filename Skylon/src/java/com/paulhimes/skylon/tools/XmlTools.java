@@ -1,6 +1,8 @@
 package com.paulhimes.skylon.tools;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -14,7 +16,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.paulhimes.skylon.logging.Logger;
+import com.paulhimes.skylon.xml.XmlModel;
 import com.paulhimes.skylon.xml.XmlParseException;
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class XmlTools {
 
@@ -66,5 +71,33 @@ public class XmlTools {
 		}
 
 		throw new XmlParseException(file.getAbsolutePath());
+	}
+
+	public static boolean writeNodeToFile(XmlModel model, File file) {
+		// Create a new emply Actions file.
+		Document document = XmlTools.createDocument();
+		if (document == null) {
+			return false;
+		}
+
+		Node node = model.encodeXml(document);
+
+		document.appendChild(node);
+
+		try {
+			FileOutputStream out = new FileOutputStream(file);
+			OutputFormat format = new OutputFormat(document);
+			format.setIndenting(true);
+			XMLSerializer output = new XMLSerializer(out, format);
+			output.serialize(document);
+			out.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+
+		return true;
 	}
 }
