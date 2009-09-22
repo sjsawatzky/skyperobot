@@ -88,7 +88,7 @@ public class SimpleReplyChatAction implements ChatAction {
 		// </rules>
 		// </action>
 
-		Node simpleChatAction = document.createElement("simplereplychataction");
+		Node simpleChatAction = document.createElement("simpleReplyChatAction");
 		XmlTools.setAttribute(simpleChatAction, "name", getName(), document);
 
 		// reply
