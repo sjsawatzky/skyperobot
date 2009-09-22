@@ -7,6 +7,7 @@ import com.paulhimes.skylon.logging.Logger;
 
 public final class NerveCenter {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = new Logger(getClass());
 
 	private final TrayIcon trayIcon;
