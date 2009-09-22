@@ -20,6 +20,7 @@ import com.paulhimes.skylon.logging.Logger;
 
 public class Skylon {
 
+	@SuppressWarnings("unused")
 	private Logger logger = new Logger(getClass());
 	private TrayIcon trayIcon;
 

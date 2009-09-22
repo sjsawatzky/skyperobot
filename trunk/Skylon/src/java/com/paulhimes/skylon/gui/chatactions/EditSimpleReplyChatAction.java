@@ -32,6 +32,7 @@ import com.paulhimes.skylon.logging.Logger;
 
 public class EditSimpleReplyChatAction {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = new Logger(getClass());
 
 	private final JTextField nameField = new JTextField();
