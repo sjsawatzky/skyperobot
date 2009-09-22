@@ -12,82 +12,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import com.paulhimes.skylon.gui.EditActionsWindow;
 import com.paulhimes.skylon.logging.Logger;
-import com.paulhimes.skylon.tools.XmlTools;
-import com.paulhimes.skylon.xml.XmlModel;
-import com.paulhimes.skylon.xml.XmlParseException;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class Skylon {
 
 	private Logger logger = new Logger(getClass());
 	private TrayIcon trayIcon;
-	private NerveCenter nerveCenter;
 
 	public Skylon() {
 		trayIcon = createTrayIcon();
 
 		File actionsFile = new File(System.getProperty("user.dir"), "skylonProfile.xml");
-		Actions actions = loadActions(actionsFile);
-		if (actions == null) {
-			// Create a new empty Actions object.
-			actions = new Actions();
-			writeNodeToFile(actions, actionsFile);
-		}
+		DataStore.loadActions(actionsFile);
 
-		nerveCenter = new NerveCenter(trayIcon, actions);
-	}
-
-	private boolean writeNodeToFile(XmlModel model, File file) {
-		// Create a new emply Actions file.
-		Document document = XmlTools.createDocument();
-		if (document == null) {
-			return false;
-		}
-
-		Node node = model.encodeXml(document);
-
-		document.appendChild(node);
-
-		try {
-			FileOutputStream out = new FileOutputStream(file);
-			OutputFormat format = new OutputFormat(document);
-			format.setIndenting(true);
-			XMLSerializer output = new XMLSerializer(out, format);
-			output.serialize(document);
-			out.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			System.err.println(e);
-		}
-
-		return true;
-	}
-
-	private Actions loadActions(File file) {
-		Actions actions = null;
-		try {
-			Element actionsElement = XmlTools.getElementFromFile(file, "actions");
-			actions = Actions.parseXml(actionsElement);
-		} catch (XmlParseException e) {
-			logger.info("Failed to load actions from file: " + file.getAbsolutePath());
-		}
-
-		return actions;
+		new NerveCenter(trayIcon);
 	}
 
 	private TrayIcon createTrayIcon() {
@@ -157,7 +99,7 @@ public class Skylon {
 	}
 
 	private void editActions() {
-		new EditActionsWindow(nerveCenter.getActions());
+		new EditActionsWindow();
 	}
 
 	/**

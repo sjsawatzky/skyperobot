@@ -7,7 +7,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.paulhimes.skylon.ChatListener;
 import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.gui.chatactions.EditSimpleReplyChatAction;
 import com.paulhimes.skylon.logging.Logger;
@@ -23,8 +22,6 @@ public class SimpleReplyChatAction implements ChatAction {
 	private String name;
 	private String reply;
 	private Rules rules;
-
-	private ChatListener chatListener;
 
 	public SimpleReplyChatAction(String name, String reply, Rules rules) {
 		this.name = name;
@@ -44,7 +41,6 @@ public class SimpleReplyChatAction implements ChatAction {
 		String content = message.getContent();
 
 		if (rules.matches(senderId, content)) {
-			chatListener.giveMessage(name);
 			logger.info(name);
 			message.getChat().send(reply);
 		}
@@ -52,11 +48,6 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	@Override
 	public void sent(ChatMessage message) throws SkypeException {
-	}
-
-	@Override
-	public void registerCallback(ChatListener chatListener) {
-		this.chatListener = chatListener;
 	}
 
 	public String getName() {

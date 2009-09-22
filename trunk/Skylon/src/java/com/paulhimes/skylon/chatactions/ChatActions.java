@@ -13,57 +13,47 @@ import com.paulhimes.skylon.xml.XmlParseException;
 
 public class ChatActions {
 
-	private List<ChatAction> actions;
+	private List<ChatAction> chatActionList;
 	private ChatListener listener;
 
-	public ChatActions(List<ChatAction> actions) {
-		this.actions = actions;
+	public ChatActions(List<ChatAction> chatActionList) {
+		this.chatActionList = chatActionList;
 	}
 
 	public ChatActions() {
 		this(new ArrayList<ChatAction>());
 	}
 
-	public List<ChatAction> getActions() {
-		return actions;
+	public List<ChatAction> getChatActionList() {
+		return chatActionList;
 	}
 
 	public void add(ChatAction action) {
-		actions.add(action);
-
-		registerCallback(listener);
+		chatActionList.add(action);
 	}
 
 	public void remove(int index) {
-		if (index >= 0 && index < actions.size()) {
-			actions.remove(index);
+		if (index >= 0 && index < chatActionList.size()) {
+			chatActionList.remove(index);
 		}
 	}
 
 	public void moveUp(int index) {
-		if (index > 0 && index < actions.size()) {
-			actions.add(index - 1, actions.remove(index));
+		if (index > 0 && index < chatActionList.size()) {
+			chatActionList.add(index - 1, chatActionList.remove(index));
 		}
 	}
 
 	public void moveDown(int index) {
-		if (index >= 0 && index < actions.size() - 1) {
-			actions.add(index + 1, actions.remove(index));
-		}
-	}
-
-	public void registerCallback(ChatListener listener) {
-		this.listener = listener;
-
-		for (ChatAction action : actions) {
-			action.registerCallback(listener);
+		if (index >= 0 && index < chatActionList.size() - 1) {
+			chatActionList.add(index + 1, chatActionList.remove(index));
 		}
 	}
 
 	public Node encodeXml(Document document) {
 		Node chatActionsNode = document.createElement("chatActions");
 
-		for (ChatAction action : actions) {
+		for (ChatAction action : chatActionList) {
 			// actions
 			chatActionsNode.appendChild(action.encodeXml(document));
 		}
