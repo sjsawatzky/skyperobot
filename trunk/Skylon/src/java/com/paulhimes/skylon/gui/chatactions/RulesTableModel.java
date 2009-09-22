@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 
+import com.paulhimes.skylon.DataStore;
 import com.paulhimes.skylon.chatactions.rules.Rule;
 import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
@@ -90,7 +91,7 @@ public class RulesTableModel extends AbstractTableModel {
 				break;
 			}
 
-			fireTableCellUpdated(row, col);
+			updateActions();
 		}
 
 	}
@@ -114,18 +115,24 @@ public class RulesTableModel extends AbstractTableModel {
 	public void removeRule(int selectedRow) {
 		if (selectedRow >= 0 && selectedRow < rules.getRules().size()) {
 			rules.getRules().remove(selectedRow);
-			fireTableDataChanged();
+			updateActions();
 		}
 	}
 
 	public void addRule() {
 		rules.getRules().add(new Rule());
 
-		fireTableDataChanged();
+		updateActions();
 	}
 
 	public Rules getRules() {
 		return rules;
+	}
+
+	private void updateActions() {
+		fireTableDataChanged();
+
+		DataStore.saveActions();
 	}
 
 }

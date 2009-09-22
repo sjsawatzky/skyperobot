@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.paulhimes.skylon.DataStore;
 import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.gui.chatactions.EditSimpleReplyChatAction;
 import com.paulhimes.skylon.logging.Logger;
@@ -56,6 +57,7 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	public void setName(String name) {
 		this.name = name;
+		DataStore.saveActions();
 	}
 
 	public Rules getRules() {
@@ -64,6 +66,7 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	public void setRules(Rules rules) {
 		this.rules = rules;
+		DataStore.saveActions();
 	}
 
 	public String getReply() {
@@ -72,6 +75,7 @@ public class SimpleReplyChatAction implements ChatAction {
 
 	public void setReply(String reply) {
 		this.reply = reply;
+		DataStore.saveActions();
 	}
 
 	@Override
