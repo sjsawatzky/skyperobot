@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 
 import com.paulhimes.skylon.ChatListener;
 import com.paulhimes.skylon.chatactions.rules.Rules;
-import com.paulhimes.skylon.gui.EditSimpleReplyChatAction;
+import com.paulhimes.skylon.gui.chatactions.EditSimpleReplyChatAction;
 import com.paulhimes.skylon.logging.Logger;
 import com.paulhimes.skylon.tools.XmlTools;
 import com.paulhimes.skylon.xml.XmlParseException;

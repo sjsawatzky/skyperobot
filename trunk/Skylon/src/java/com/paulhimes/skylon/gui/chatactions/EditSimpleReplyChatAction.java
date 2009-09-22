@@ -1,4 +1,4 @@
-package com.paulhimes.skylon.gui;
+package com.paulhimes.skylon.gui.chatactions;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,6 +27,7 @@ import com.paulhimes.skylon.chatactions.rules.Rules;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleMatch;
 import com.paulhimes.skylon.chatactions.rules.Rule.RuleType;
 import com.paulhimes.skylon.chatactions.rules.Rules.RulesOperator;
+import com.paulhimes.skylon.gui.SwingTable;
 import com.paulhimes.skylon.logging.Logger;
 
 public class EditSimpleReplyChatAction {
