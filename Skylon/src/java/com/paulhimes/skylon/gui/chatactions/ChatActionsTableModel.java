@@ -106,7 +106,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 		logger.info("delete action " + index);
 		DataStore.getChatActions().remove(index);
 
-		fireTableDataChanged();
+		updateActions();
 	}
 
 	private void moveActionUp(int index) {
@@ -114,7 +114,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 
 		DataStore.getChatActions().moveUp(index);
 
-		fireTableDataChanged();
+		updateActions();
 	}
 
 	private void moveActionDown(int index) {
@@ -122,7 +122,7 @@ public class ChatActionsTableModel extends AbstractTableModel {
 
 		DataStore.getChatActions().moveDown(index);
 
-		fireTableDataChanged();
+		updateActions();
 	}
 
 	private JButton makeDeleteButton() {
@@ -152,6 +152,12 @@ public class ChatActionsTableModel extends AbstractTableModel {
 	public void addAction(ChatAction action) {
 		DataStore.getChatActions().add(action);
 
+		updateActions();
+	}
+
+	private void updateActions() {
 		fireTableDataChanged();
+
+		DataStore.saveActions();
 	}
 }
