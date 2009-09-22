@@ -22,15 +22,15 @@ public class Skylon {
 
 	@SuppressWarnings("unused")
 	private Logger logger = new Logger(getClass());
-	private TrayIcon trayIcon;
 
 	public Skylon() {
-		trayIcon = createTrayIcon();
 
 		File actionsFile = new File(System.getProperty("user.dir"), "skylonProfile.xml");
 		DataStore.loadActions(actionsFile);
 
-		new NerveCenter(trayIcon);
+		new ChatListener();
+
+		createTrayIcon();
 	}
 
 	private TrayIcon createTrayIcon() {
